@@ -8,6 +8,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.me.combate.Main;
+import com.me.combate.essentials.SceneManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -34,7 +35,9 @@ public class AboutController implements Initializable {
 
     @FXML
     private void goToMenu(ActionEvent event) throws IOException {
-        Main.setRoot("menu");
+        SceneManager sm = Main.getSceneManager();
+        
+        sm.setScene("menu");
     }
     
 }
