@@ -8,23 +8,31 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import com.me.combate.Main;
+import com.me.combate.essentials.SceneManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
-
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.event.Event;
+import javafx.scene.text.TextAlignment;
 /**
  * FXML Controller class
  *
  * @author rafaelboeira
  */
 public class InGameController implements Initializable {
-
+    //Pode ficar dentro duma classe tabuleiro
     private Button selected_button = null;
+    
+    private boolean in_debug_mode = false;
+    
+    private int positioned_pieces = 0;
+    //----------------------------------------
     @FXML
     private Button bt_flag;
     @FXML
@@ -63,12 +71,14 @@ public class InGameController implements Initializable {
                 bt.setText("");
                 bt.setId("bt_"+i+""+j);
                 bt.setWrapText(true);
+                bt.setTextAlignment(TextAlignment.CENTER);
                 
                 bt.setOnAction(eh -> {
-                    if (this.selected_button != null && this.bt_begin.isDisabled())
-                        this.insertPiece(eh);   
+                    if (this.selected_button != null && this.bt_begin.isDisabled()){
+                        this.insertPiece(eh); 
+                    }
                     if (this.bt_begin.isVisible() == false)
-                        this.movePiece(eh);
+                        this.selectButton(eh);
                 });
                 
                 this.gd_table.add(bt, j, i);
@@ -92,7 +102,11 @@ public class InGameController implements Initializable {
         if (bt_destiny.getText().isBlank()){
             bt_destiny.setText(this.selected_button.getText());
             this.selected_button = null;
+            this.positioned_pieces++;
         }
+        
+        if (positioned_pieces == 10)
+            bt_begin.setDisable(false);
     }
     
     private void movePiece(Event eh){
@@ -108,11 +122,34 @@ public class InGameController implements Initializable {
 
     @FXML
     private void goToMenu(ActionEvent event) throws IOException {
-        Main.setRoot("menu");
+        SceneManager sm = Main.getSceneManager();
+        
+        if (!bt_begin.isVisible()){
+            Scene sc_menu = sm.getScene("menu");
+            Button bt_restart = (Button) sc_menu.lookup("#bt_restart");
+            
+            bt_restart.setVisible(true);
+        }
+        
+        sm.setScene("menu");
     }
 
     @FXML
     private void insert(MouseEvent event) {
+    }
+
+    @FXML
+    private void startGame(ActionEvent event) {
+        bt_begin.setVisible(false);
+    }
+
+    @FXML
+    private void showDebugView(ActionEvent event) {
+        if(!in_debug_mode){
+            in_debug_mode = true;
+            // mostra peças inimigas
+            return;
+        }
     }
     
 }
