@@ -25,6 +25,7 @@ import javafx.scene.text.TextAlignment;
  *
  * @author rafaelboeira
  */
+
 public class InGameController implements Initializable {
     //Pode ficar dentro duma classe tabuleiro
     private Button selected_button = null;

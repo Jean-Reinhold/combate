@@ -1,5 +1,6 @@
 com/me/combate/controllers/InGameController.class
 com/me/combate/Main.class
+com/me/combate/models/Troop.class
 com/me/combate/essentials/SceneManager.class
 com/me/combate/models/MenuModel.class
 module-info.class
