@@ -20,40 +20,14 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import javafx.event.Event;
 import javafx.scene.text.TextAlignment;
-/**
- * FXML Controller class
- *
- * @author rafaelboeira
- */
 
 public class InGameController implements Initializable {
-    //Pode ficar dentro duma classe tabuleiro
     private Button selected_button = null;
-    
     private boolean in_debug_mode = false;
-    
     private int positioned_pieces = 0;
-    //----------------------------------------
-    @FXML
-    private Button bt_flag;
-    @FXML
-    private Button bt_bomb1;
-    @FXML
-    private Button bt_bomb2;
-    @FXML
-    private Button bt_spy;
-    @FXML
-    private Button bt_soldier1;
-    @FXML
-    private Button bt_soldier2;
-    @FXML
-    private Button bt_soldier3;
-    @FXML
-    private Button bt_gunsmith1;
-    @FXML
-    private Button bt_gunsmith2;
-    @FXML
-    private Button bt_marshal;
+    private int GRID_SIZE = 5;
+    private int USER_MAX_Y = 1;
+
     @FXML
     private GridPane gd_table;
     @FXML
@@ -65,29 +39,36 @@ public class InGameController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        for (int i=0; i<5; i++){
-            for (int j=0; j<5; j++){
+        createEmptyGrid();
+    }
+
+    private void createEmptyGrid(){
+        for (int i=0; i<this.getGridSize(); i++){
+            for (int j=0; j<this.getGridSize(); j++){
                 Button bt = new Button();
                 bt.setText("");
                 bt.setId("bt_"+i+""+j);
                 bt.setWrapText(true);
                 bt.setTextAlignment(TextAlignment.CENTER);
-                
+
                 bt.setOnAction(eh -> {
                     if (this.selected_button != null && this.bt_begin.isDisabled()){
-                        this.insertPiece(eh); 
+                        this.insertPiece(eh);
                     }
                     if (this.bt_begin.isVisible() == false)
                         this.selectButton(eh);
                 });
-                
+
                 this.gd_table.add(bt, j, i);
                 bt.setPrefSize(107, 82);
             }
         }
-    }    
-    
+
+    }
+
+    public int getGridSize(){
+        return this.GRID_SIZE;
+    }
     private void insertMachinePieces(){
     
     }
@@ -97,7 +78,7 @@ public class InGameController implements Initializable {
         
         int row = Integer.parseInt(bt_destiny.getId().substring(3, 4));
         
-        if (row > 1)
+        if (row > USER_MAX_Y)
             return;
         
         if (bt_destiny.getText().isBlank()){

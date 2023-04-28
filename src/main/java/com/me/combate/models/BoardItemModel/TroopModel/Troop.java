@@ -1,10 +1,11 @@
-package com.me.combate.models;
+package com.me.combate.models.BoardItemModel.TroopModel;
 
+import com.me.combate.models.BoardItemModel.Item;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 
-public class Troop {
+public class Troop extends Item {
     @FXML
     private Button bt;
     private int level;
