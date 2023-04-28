@@ -20,7 +20,6 @@ import java.util.LinkedList;
  */
 public class SceneManager {
     private Stage stage;
-    private int was_changed = 0;
     private HashMap<String,Scene> scenes;
     
     public SceneManager(Stage stage){
@@ -37,10 +36,6 @@ public class SceneManager {
         return stage;
     }
     
-    public void changed(){
-        was_changed = 1;
-    }
-    
     public void addScene(String fxml, Scene sc){
         scenes.put(fxml, sc);
     }
@@ -55,12 +50,6 @@ public class SceneManager {
     
     public void setScene(String fxml){
         stage.setScene(scenes.get(fxml));
-        if (was_changed == 1){
-            LinkedList<Object> prop = (LinkedList) stage.getUserData();
-            Button bt = (Button) prop.get(0);
-            bt.setVisible((Boolean)prop.get(1));
-            was_changed = 0;
-        }
     }
     
     public void resetScenes() throws IOException {
