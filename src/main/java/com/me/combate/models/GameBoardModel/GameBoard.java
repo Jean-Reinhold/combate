@@ -45,7 +45,7 @@ public class GameBoard {
         item.setY(y);
     }
 
-    public void removeItem(Item item, int x, int y) {
+    public void removeAt(Item item, int x, int y) {
         if (x >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on x = " + x);
         }
@@ -54,6 +54,8 @@ public class GameBoard {
         }
 
         setAt(x, y, null);
+        item.setX(-1);
+        item.setY(-1);
     }
 
     public int getGameBoardSize() {

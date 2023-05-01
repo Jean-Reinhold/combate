@@ -1,7 +1,8 @@
 package com.me.combate.models.ItemModel;
 
 public class Item {
-    private int x, y;
+    private int x = -1;
+    private int y = -1;
     private String team = "user";
     private String path;
 
