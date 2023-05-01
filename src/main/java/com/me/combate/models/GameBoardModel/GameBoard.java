@@ -15,6 +15,10 @@ public class GameBoard {
 
     }
 
+    public Item getAt(int x, int y) {
+        return this.board[x][y];
+    }
+
     private void initializeBoard() {
         for (int i = 0; i < this.getGameBoardSize(); i++) {
             for (int j = 0; j < this.getGameBoardSize(); j++) {
