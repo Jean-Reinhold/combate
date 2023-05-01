@@ -21,12 +21,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class InGameController implements Initializable {
+    private final int GRID_SIZE = 5;
+    private final int USER_MAX_Y = 1;
     private Button selected_button = null;
     private boolean in_debug_mode = false;
     private int positioned_pieces = 0;
-    private final int GRID_SIZE = 5;
-    private final int USER_MAX_Y = 1;
-
     @FXML
     private GridPane gd_table;
     @FXML

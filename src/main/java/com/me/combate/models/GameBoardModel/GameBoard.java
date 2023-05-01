@@ -14,18 +14,20 @@ public class GameBoard {
         this.initializeBoard();
 
     }
-    private void initializeBoard(){
-        for (int i = 0; i < this.getGameBoardSize(); i++){
-            for (int j = 0; j < this.getGameBoardSize(); j++){
+
+    private void initializeBoard() {
+        for (int i = 0; i < this.getGameBoardSize(); i++) {
+            for (int j = 0; j < this.getGameBoardSize(); j++) {
                 this.board[i][j] = null;
             }
         }
     }
-    public void insertItem(Item item, int x, int y){
-        if (x >= this.getGameBoardSize()){
+
+    public void insertItem(Item item, int x, int y) {
+        if (x >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on x = " + x);
         }
-        if (y >= this.getGameBoardSize()){
+        if (y >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on y = " + y);
         }
 
@@ -35,11 +37,11 @@ public class GameBoard {
         item.setY(y);
     }
 
-    public void removeItem(Item item, int x, int y){
-        if (x >= this.getGameBoardSize()){
+    public void removeItem(Item item, int x, int y) {
+        if (x >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on x = " + x);
         }
-        if (y >= this.getGameBoardSize()){
+        if (y >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on y = " + y);
         }
 
