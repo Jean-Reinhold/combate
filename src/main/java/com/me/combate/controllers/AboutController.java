@@ -4,16 +4,16 @@
  */
 package com.me.combate.controllers;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 import com.me.combate.Main;
 import com.me.combate.essentials.SceneManager;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
 /**
  * FXML Controller class
@@ -31,13 +31,13 @@ public class AboutController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    }
 
     @FXML
     private void goToMenu(ActionEvent event) throws IOException {
         SceneManager sm = Main.getSceneManager();
-        
+
         sm.setScene("menu");
     }
-    
+
 }
