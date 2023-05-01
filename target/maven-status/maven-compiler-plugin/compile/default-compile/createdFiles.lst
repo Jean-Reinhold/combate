@@ -1,8 +1,0 @@
-com/me/combate/controllers/InGameController.class
-com/me/combate/Main.class
-com/me/combate/essentials/SceneManager.class
-com/me/combate/models/MenuModel.class
-module-info.class
-com/me/combate/controllers/MenuController.class
-com/me/combate/models/AboutModel.class
-com/me/combate/models/InGameModel.class
