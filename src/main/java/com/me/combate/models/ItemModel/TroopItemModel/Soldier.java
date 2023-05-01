@@ -11,20 +11,24 @@ import java.util.Random;
 public class Soldier extends Troop {
     static private final int level = 2;
 
-    public int attack(GameBoard gameBoard, int x, int y){
+    public Soldier(String team) {
+        super(team);
+    }
+
+    public int attack(GameBoard gameBoard, int x, int y) {
         validateAttack(gameBoard, x, y);
 
-        if (gameBoard.getAt(x, y) instanceof Bomb){
+        if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
         }
-        if (gameBoard.getAt(x, y) instanceof Flag){
+        if (gameBoard.getAt(x, y) instanceof Flag) {
             return 0;
         }
-        if (gameBoard.getAt(x, y) instanceof Soldier){
+        if (gameBoard.getAt(x, y) instanceof Soldier) {
             Random random = new Random();
             boolean iWin = random.nextBoolean();
-            if (iWin){
+            if (iWin) {
                 gameBoard.removeAt(gameBoard.getAt(x, y), x, y);
                 return 1;
             } else {
@@ -33,7 +37,7 @@ public class Soldier extends Troop {
             }
         }
         Troop opponent = (Troop) gameBoard.getAt(x, y);
-        if (getLevel() < opponent.getLevel()){
+        if (getLevel() < opponent.getLevel()) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
         }

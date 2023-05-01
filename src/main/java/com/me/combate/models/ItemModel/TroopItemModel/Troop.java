@@ -9,6 +9,11 @@ public class Troop extends Item {
     private int level;
     private int x, y;
 
+    public Troop(String team) {
+        super(team);
+    }
+
+
     public void move(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         validateMove(gameBoard, x, y);
 

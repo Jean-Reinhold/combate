@@ -3,6 +3,9 @@ package com.me.combate.models.GameBoardModel;
 import com.me.combate.exceptions.ItemOutOfBounds;
 import com.me.combate.models.ItemModel.Item;
 
+import java.util.HashMap;
+import java.util.Set;
+
 public class GameBoard {
     private final int GAMEBOARD_SIZE = 5;
     private final Item[][] board;
@@ -76,5 +79,25 @@ public class GameBoard {
 
     public void setWhoIsPlaying(String whoIsPlaying) {
         this.whoIsPlaying = whoIsPlaying;
+    }
+
+    public HashMap<String, Integer> itemCount(String team){
+        HashMap<String, Integer> counter = new HashMap<String, Integer>();
+
+        for (int i = 0; i < getGameBoardSize(); i++){
+            for (int j = 0; j < getGameBoardSize(); j++){
+                String itemType = getAt(i, j).getClass().getName().toLowerCase();
+                counter.put(itemType, counter.get(itemType) + 1);
+            }
+        }
+        return counter;
+    }
+
+    private void initializeCounter(HashMap<String, Integer> counter){
+        Set<String> itemTypes =  Set.of("general", "gunsmith", "soldier", "spy", "bomb", "flag");
+
+        for (String itemType: itemTypes){
+            counter.put(itemType, 0);
+        }
     }
 }

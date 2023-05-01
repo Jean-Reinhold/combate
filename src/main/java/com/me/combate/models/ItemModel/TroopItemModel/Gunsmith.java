@@ -9,20 +9,24 @@ import java.util.Random;
 public class Gunsmith extends Troop {
     static private final int level = 3;
 
-    public int attack(GameBoard gameBoard, int x, int y){
+    public Gunsmith(String team) {
+        super(team);
+    }
+
+    public int attack(GameBoard gameBoard, int x, int y) {
         validateAttack(gameBoard, x, y);
 
-        if (gameBoard.getAt(x, y) instanceof Bomb){
+        if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(gameBoard.getAt(x, y), x, y);
             return 1;
         }
-        if (gameBoard.getAt(x, y) instanceof Flag){
+        if (gameBoard.getAt(x, y) instanceof Flag) {
             return 0;
         }
-        if (gameBoard.getAt(x, y) instanceof Gunsmith){
+        if (gameBoard.getAt(x, y) instanceof Gunsmith) {
             Random random = new Random();
             boolean iWin = random.nextBoolean();
-            if (iWin){
+            if (iWin) {
                 gameBoard.removeAt(gameBoard.getAt(x, y), x, y);
                 return 1;
             } else {
@@ -31,7 +35,7 @@ public class Gunsmith extends Troop {
             }
         }
         Troop opponent = (Troop) gameBoard.getAt(x, y);
-        if (getLevel() < opponent.getLevel()){
+        if (getLevel() < opponent.getLevel()) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
         }

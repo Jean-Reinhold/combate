@@ -4,7 +4,11 @@ public class Item {
     private int x = -1;
     private int y = -1;
     private String team = "user";
-    private String path;
+    private String pathToIcon;
+
+    public Item(String team) {
+        this.team = team;
+    }
 
     public String getTeam() {
         return team;
@@ -14,12 +18,12 @@ public class Item {
         this.team = team;
     }
 
-    public String getPath() {
-        return path;
+    public String getPathToIcon() {
+        return pathToIcon;
     }
 
-    protected void setPath(String path) {
-        this.path = path;
+    protected void setPathToIcon(String pathToIcon) {
+        this.pathToIcon = pathToIcon;
     }
 
     public int getX() {
