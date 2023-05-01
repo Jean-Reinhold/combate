@@ -10,8 +10,8 @@ public class GameBoard {
     private String whoIsPlaying = "user";
 
     public GameBoard() {
-        this.board = new Item[getGameBoardSize()][getGameBoardSize()];
-        this.initializeBoard();
+        board = new Item[getGameBoardSize()][getGameBoardSize()];
+        initializeBoard();
 
     }
 
@@ -19,10 +19,14 @@ public class GameBoard {
         return this.board[x][y];
     }
 
+    public void setAt(int x, int y, Item value) {
+        this.board[x][y] = value;
+    }
+
     private void initializeBoard() {
         for (int i = 0; i < this.getGameBoardSize(); i++) {
             for (int j = 0; j < this.getGameBoardSize(); j++) {
-                this.board[i][j] = null;
+                setAt(i, j, null);
             }
         }
     }
@@ -35,7 +39,7 @@ public class GameBoard {
             throw new ItemOutOfBounds("Cannot position item on y = " + y);
         }
 
-        this.board[x][y] = item;
+        setAt(x, y, item);
 
         item.setX(x);
         item.setY(y);
@@ -49,7 +53,7 @@ public class GameBoard {
             throw new ItemOutOfBounds("Cannot position item on y = " + y);
         }
 
-        this.board[x][y] = null;
+        setAt(x, y, null);
     }
 
     public int getGameBoardSize() {
