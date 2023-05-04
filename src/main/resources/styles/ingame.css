@@ -58,12 +58,12 @@
     -fx-box-sizing: border-box;
 }
 
-.player {
+.user {
     -fx-border-color: rgb(13, 87, 5);
     -fx-background-color: rgb(43, 117, 35);
 }
 
-.player:hover {
+.user:hover {
     -fx-border-color: rgb(63,137,55);
 }
 

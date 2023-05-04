@@ -43,6 +43,7 @@ public class InGameController implements Initializable {
     private int[] individualQuantities = new int[UNIQUE_PIECES];
     private final int USER_MIN_Y = 3;
     private final int HINT_MAX = 3;
+    private int lakeRow, lakeCol;
     private int counterOfHints = 0;
     private String state = "positioning";
     private int[] positionedPieces = new int[UNIQUE_PIECES];
@@ -62,55 +63,36 @@ public class InGameController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        gameBoard = new GameBoard();
-        
-        createNameMap();
-        
-        IntStream sizes = IntStream.of(3,1,2,1,1,2);
-        individualQuantities = fillVector(individualQuantities, sizes);
-        
-        IntStream init = IntStream.of(0,0,0,0,0,0);
-        positionedPieces = fillVector(positionedPieces,init);
+        initializeVariables();
+        initializeGrid();
         
         bt_back.getStyleClass().setAll("bt","bt_enabled");
         bt_debug.getStyleClass().setAll("bt","bt_enabled");
         bt_hint.getStyleClass().setAll("bt","bt_enabled");
         bt_begin.getStyleClass().setAll("bt","bt_disabled");
-           
-        Random rand = new Random();   
-        int lake_row = 2;
-        int lake_col = rand.nextInt(5);
+    }
+    
+    private void refresh(){
+        SceneManager sm = Main.getSceneManager();
         
-        int size = gameBoard.getGameBoardSize();
-        ContextMenu cm = createPieceContextMenu();
-        
-        for (int i=0; i<size; i++){
-            for (int j=0; j<size; j++){
-                Button bt = new Button();
-                bt.setId("bt_"+i+""+j);
+        for (int i=0; i<GRID_SIZE; i++){
+            for (int j=0; j<GRID_SIZE; j++){
+                Item piece = gameBoard.getAt(i, j);
+                String team = piece.getTeam();
+                String id = "#bt_"+i+""+j+"";
+                Button bt = (Button) sm.getScene("inGame").lookup(id);
                 
-                if (i >= USER_MIN_Y){
-                    // Para de exibir o popup após o início do jogo;
-                    bt.setOnContextMenuRequested(eh -> { 
-                        if (state.equals("inGame"))
-                            return;
-                        
-                        if (!bt_begin.isDisable()){
-                            Button bt_clicked = (Button) eh.getSource();
-                            bt_clicked.getContextMenu().hide();
-                        }
-                    });
-                    bt.setContextMenu(cm);
+                if (i == lakeRow && j == lakeCol)
+                    continue;
+                
+                if (piece == null){         
+                    bt.getStyleClass().setAll("piece","ground", "neutral");
+                    continue;
                 }
                 
-                if ((i == lake_row) && (j == lake_col)){
-                    bt.getStyleClass().setAll("piece", "lake");
+                String itemClass = piece.getClass().getName().toLowerCase();
                     
-                } else {
-                    bt.getStyleClass().setAll("piece", "ground", "neutral");
-                }
-                
-                gd_table.add(bt, j, i);
+                bt.getStyleClass().setAll("piece", itemClass, team);
             }
         }
     }
@@ -209,7 +191,7 @@ public class InGameController implements Initializable {
         if (bt_clicked.getText().isBlank()){
             String style = nameMap.get(mi.getText());
            
-            bt_clicked.getStyleClass().setAll("player", style, "piece");
+            bt_clicked.getStyleClass().setAll("user", style, "piece");
             bt_clicked.setText(mi.getText());
         } else {
             return false;
@@ -223,6 +205,56 @@ public class InGameController implements Initializable {
         }
         
         return true;
+    }
+    
+    private void initializeVariables(){
+        gameBoard = new GameBoard();
+        
+        createNameMap();
+        
+        IntStream sizes = IntStream.of(3,1,2,1,1,2);
+        individualQuantities = fillVector(individualQuantities, sizes);
+        
+        IntStream init = IntStream.of(0,0,0,0,0,0);
+        positionedPieces = fillVector(positionedPieces,init);
+        
+        Random rand = new Random();   
+        lakeRow = 2;
+        lakeCol = rand.nextInt(5);
+    }
+    
+    private void initializeGrid(){
+        ContextMenu cm = createPieceContextMenu();
+        
+        for (int i=0; i<GRID_SIZE; i++){
+            for (int j=0; j<GRID_SIZE; j++){
+                Button bt = new Button();
+                bt.setId("bt_"+i+""+j);
+                
+                if (i >= USER_MIN_Y){
+                    // Para de exibir o popup após o início do jogo;
+                    bt.setOnContextMenuRequested(eh -> { 
+                        if (state.equals("inGame"))
+                            return;
+                        
+                        if (!bt_begin.isDisable()){
+                            Button bt_clicked = (Button) eh.getSource();
+                            bt_clicked.getContextMenu().hide();
+                        }
+                    });
+                    bt.setContextMenu(cm);
+                }
+                
+                if ((i == lakeRow) && (j == lakeCol)){
+                    bt.getStyleClass().setAll("piece", "lake");
+                    
+                } else {
+                    bt.getStyleClass().setAll("piece", "ground", "neutral");
+                }
+                
+                gd_table.add(bt, j, i);
+            }
+        }
     }
     
     private int[] fillVector(int[] v, IntStream values){
