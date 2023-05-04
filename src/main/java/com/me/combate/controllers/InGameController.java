@@ -72,13 +72,12 @@ public class InGameController implements Initializable {
         bt_begin.getStyleClass().setAll("bt","bt_disabled");
     }
     
-    private void refresh(){
+    private void refreshGrid(){
         SceneManager sm = Main.getSceneManager();
         
         for (int i=0; i<GRID_SIZE; i++){
             for (int j=0; j<GRID_SIZE; j++){
                 Item piece = gameBoard.getAt(i, j);
-                String team = piece.getTeam();
                 String id = "#bt_"+i+""+j+"";
                 Button bt = (Button) sm.getScene("inGame").lookup(id);
                 
@@ -89,7 +88,8 @@ public class InGameController implements Initializable {
                     bt.getStyleClass().setAll("piece","ground", "neutral");
                     continue;
                 }
-                
+                                
+                String team = piece.getTeam();
                 String itemClass = piece.getClass().getName().toLowerCase();
                     
                 bt.getStyleClass().setAll("piece", itemClass, team);
@@ -165,12 +165,15 @@ public class InGameController implements Initializable {
         for (int k=0; k<UNIQUE_PIECES; k++){
             mi.get(k).getStyleClass().setAll("popup");
             mi.get(k).setOnAction(eh -> {
+                SceneManager sm = Main.getSceneManager();
+                Button bt_clicked = (Button) sm.getScene("inGame").getFocusOwner();
+                
                 int[] n_pieces = individualQuantities;
                             
                 MenuItem mi_source = (MenuItem) eh.getSource();
                 int index = mi.indexOf(mi_source);
                             
-                if (insertPiece(eh))
+                if (insertPiece(bt_clicked,mi_source.getText()))
                     positionedPieces[index]++;
                 
                 if (positionedPieces[index] == n_pieces[index])
@@ -182,17 +185,12 @@ public class InGameController implements Initializable {
         return cm;
     }
     
-    private boolean insertPiece(Event eh) {
-        SceneManager sm = Main.getSceneManager();
-        
-        Button bt_clicked = (Button) sm.getScene("inGame").getFocusOwner();
-        MenuItem mi = (MenuItem) eh.getSource();
-        
+    private boolean insertPiece(Button bt_clicked, String piece) {
         if (bt_clicked.getText().isBlank()){
-            String style = nameMap.get(mi.getText());
+            String style = nameMap.get(piece);
            
             bt_clicked.getStyleClass().setAll("user", style, "piece");
-            bt_clicked.setText(mi.getText());
+            bt_clicked.setText(piece);
         } else {
             return false;
         }        
