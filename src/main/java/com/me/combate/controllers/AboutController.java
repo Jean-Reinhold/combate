@@ -31,6 +31,7 @@ public class AboutController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        bt_back.getStyleClass().setAll("bt_menu");
     }
 
     @FXML

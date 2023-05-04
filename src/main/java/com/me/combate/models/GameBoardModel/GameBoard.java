@@ -5,6 +5,7 @@ import com.me.combate.models.ItemModel.Item;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class GameBoard {
     private final int GAMEBOARD_SIZE = 5;
@@ -15,7 +16,6 @@ public class GameBoard {
     public GameBoard() {
         board = new Item[getGameBoardSize()][getGameBoardSize()];
         initializeBoard();
-
     }
 
     public Item getAt(int x, int y) {

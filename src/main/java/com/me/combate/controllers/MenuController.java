@@ -28,6 +28,13 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        String style = "bt_menu";
+        
+        bt_about.getStyleClass().setAll(style);
+        bt_manual.getStyleClass().setAll(style);
+        bt_restart.getStyleClass().setAll(style);
+        bt_exit.getStyleClass().setAll(style);
+        bt_random.getStyleClass().setAll(style);        
     }
 
     @FXML
