@@ -29,7 +29,7 @@ public class GameBoard {
     private void initializeBoard() {
         for (int i = 0; i < this.getGameBoardSize(); i++) {
             for (int j = 0; j < this.getGameBoardSize(); j++) {
-                setAt(i, j, null);
+                setAt(i, j, new Item("neutral"));
             }
         }
     }

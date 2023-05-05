@@ -45,7 +45,7 @@ public class MenuController implements Initializable {
         sm.setScene("inGame");
 
         Button clicked_button = (Button) event.getSource();
-        if (clicked_button.getId().equals("bt_manual")) {
+        if (clicked_button.getText().equals("Manual")) {
             sm.getStage().setUserData(1);
         } else {
             sm.getStage().setUserData(2);

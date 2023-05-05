@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.stream.IntStream;
+import java.util.stream.Stream;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import java.util.HashMap;
@@ -42,15 +43,16 @@ import com.me.combate.models.ItemModel.TroopItemModel.Spy;
 public class InGameController implements Initializable {
     private final int GRID_SIZE = 5;
     private final int UNIQUE_PIECES = 6;
-    private int[] individualQuantities = new int[UNIQUE_PIECES];
     private final int USER_MIN_Y = 3;
     private final int HINT_MAX = 3;
     private int lakeRow, lakeCol;
     private int counterOfHints = 0;
     private String state = "positioning";
+    private int[] individualQuantities = new int[UNIQUE_PIECES];
     private int[] positionedPieces = new int[UNIQUE_PIECES];
     private HashMap<String,String> nameMap;
     
+    private Troop selectedPiece = new Troop("neutral");
     private GameBoard gameBoard;
     @FXML
     private GridPane gd_table;
@@ -62,8 +64,6 @@ public class InGameController implements Initializable {
     private Button bt_back;
     @FXML
     private Button bt_hint;
-    
-
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -86,7 +86,7 @@ public class InGameController implements Initializable {
                 if (i == lakeRow && j == lakeCol)
                     continue;
                 
-                if (piece == null){         
+                if (piece.getTeam().equals("neutral")){         
                     bt.getStyleClass().setAll("piece","ground", "neutral");
                     continue;
                 }
@@ -104,13 +104,10 @@ public class InGameController implements Initializable {
     @FXML
     private void insert(MouseEvent event) {
     }
-
-    @FXML
-    private void startGame(ActionEvent event) {        
+    
+    private void inGameButtonConfiguration() throws NullPointerException{
         ContextMenu cm = new ContextMenu();
         cm.getStyleClass().setAll("context_menu");
-        
-        refreshGrid();
         
         MenuItem mi_hint = new MenuItem("Pedir dica");
         mi_hint.getStyleClass().setAll("popup");
@@ -127,15 +124,70 @@ public class InGameController implements Initializable {
                 Button bt_piece = (Button) getNode(id,"inGame");
                 
                 bt_piece.setContextMenu(cm);
+                
+                if (i == lakeRow && j == lakeCol)
+                    continue;
+                
+                bt_piece.setOnMouseClicked(eh -> {
+                    if (gameBoard.getWhoIsPlaying().equals("machine"))
+                        return;
+                    
+                    Button bt_clicked = (Button) eh.getSource();
+                    
+                    boolean wasSuccesfull = true;
+                    int row = GridPane.getRowIndex(bt_clicked);
+                    int col = GridPane.getColumnIndex(bt_clicked);
+                    
+                    Item targetPiece = gameBoard.getAt(row, col);
+                    
+                    String selectedTeam = selectedPiece.getTeam();
+                    String targetTeam = targetPiece.getTeam();
+                    
+                    if (selectedTeam.equals("neutral") && (targetPiece instanceof Bomb || targetPiece instanceof Flag))
+                        return;
+                    
+                    if ((selectedTeam.equals("neutral") || selectedTeam.equals("user")) && targetTeam.equals("user")){
+                        selectedPiece = (Troop) targetPiece;
+                        return;
+                    }
+                    
+                    if (selectedTeam.equals("user") && targetTeam.equals("neutral"))
+                        wasSuccesfull = move(row, col);
+                    
+                    if (selectedTeam.equals("user") && targetTeam.equals("machine"))
+                        wasSuccesfull = attack(row, col);
+                    
+                    if (wasSuccesfull){
+                        refreshGrid();
+                        // TURNO DA MÁQUINA
+                    }   
+                });  
             }
         }
+    }
+
+    @FXML
+    private void startGame(ActionEvent event) throws NullPointerException{        
+        inGameButtonConfiguration();
         
+        gameBoard.setWhoIsPlaying("user");
         bt_begin.setVisible(false);
         state = "inGame";
     }
 
     @FXML
     private void showDebugView(ActionEvent event) {
+        if (state.equals("inGame"))
+            return;
+        
+    }
+    
+    private boolean move(int x, int y){
+        return true;
+    }
+    
+    private boolean attack(int x, int y){
+        return true;
     }
 
     @FXML
@@ -143,7 +195,6 @@ public class InGameController implements Initializable {
         SceneManager sm = Main.getSceneManager();
         
         if (state.equals("inGame")){
-            Scene sc_menu = sm.getScene("menu");
             Button bt_restart = (Button) getNode("#bt_restart", "menu");
             
             bt_restart.setVisible(true);
@@ -243,6 +294,8 @@ public class InGameController implements Initializable {
         
         for (int i=0; i<GRID_SIZE; i++){
             for (int j=0; j<GRID_SIZE; j++){
+                gameBoard.getAt(i, j).setX(i);
+                gameBoard.getAt(i, j).setY(j);
                 Button bt = new Button();
                 bt.setId("bt_"+i+""+j);
                 
@@ -289,14 +342,13 @@ public class InGameController implements Initializable {
     
     private void createNameMap(){
         nameMap = new HashMap();
-        
-        
+              
         nameMap.put("Soldado", "soldier");
-        nameMap.put("Bomba", "bomb");
-        nameMap.put("Bandeira", "flag");
+        nameMap.put("Espião", "spy");
         nameMap.put("Cabo Armeiro", "gunsmith");
         nameMap.put("Marechal", "marshal");
-        nameMap.put("Espião", "spy");
+        nameMap.put("Bandeira", "flag");
+        nameMap.put("Bomba", "bomb");
     }
 
     @FXML
