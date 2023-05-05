@@ -8,6 +8,7 @@ import com.me.combate.Main;
 import com.me.combate.essentials.SceneManager;
 import com.me.combate.models.GameBoardModel.GameBoard;
 import com.me.combate.models.ItemModel.Item;
+import com.me.combate.models.ItemModel.ItemFactory;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -29,12 +30,13 @@ import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import java.util.HashMap;
 import com.me.combate.models.ItemModel.Item;
+import com.me.combate.models.ItemModel.ItemFactory;
 import com.me.combate.models.ItemModel.StaticItems.Bomb;
 import com.me.combate.models.ItemModel.StaticItems.Flag;
 import com.me.combate.models.ItemModel.TroopItemModel.Troop;
 import com.me.combate.models.ItemModel.TroopItemModel.Soldier;
 import com.me.combate.models.ItemModel.TroopItemModel.Gunsmith;
-import com.me.combate.models.ItemModel.TroopItemModel.General;
+import com.me.combate.models.ItemModel.TroopItemModel.Marshal;
 import com.me.combate.models.ItemModel.TroopItemModel.Spy;
 
 public class InGameController implements Initializable {
@@ -61,6 +63,8 @@ public class InGameController implements Initializable {
     @FXML
     private Button bt_hint;
     
+
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeVariables();
@@ -73,13 +77,11 @@ public class InGameController implements Initializable {
     }
     
     private void refreshGrid(){
-        SceneManager sm = Main.getSceneManager();
-        
         for (int i=0; i<GRID_SIZE; i++){
             for (int j=0; j<GRID_SIZE; j++){
                 Item piece = gameBoard.getAt(i, j);
                 String id = "#bt_"+i+""+j+"";
-                Button bt = (Button) sm.getScene("inGame").lookup(id);
+                Button bt = (Button) getNode(id,"inGame");
                 
                 if (i == lakeRow && j == lakeCol)
                     continue;
@@ -90,9 +92,11 @@ public class InGameController implements Initializable {
                 }
                                 
                 String team = piece.getTeam();
-                String itemClass = piece.getClass().getName().toLowerCase();
-                    
-                bt.getStyleClass().setAll("piece", itemClass, team);
+                
+                String className = piece.getClass().getName().toLowerCase();
+                int startSubClassIndex = className.lastIndexOf('.') + 1;
+                
+                bt.getStyleClass().setAll("piece", className.substring(startSubClassIndex), team);
             }
         }
     }
@@ -102,11 +106,11 @@ public class InGameController implements Initializable {
     }
 
     @FXML
-    private void startGame(ActionEvent event) {
-        SceneManager sm = Main.getSceneManager();
-        
+    private void startGame(ActionEvent event) {        
         ContextMenu cm = new ContextMenu();
         cm.getStyleClass().setAll("context_menu");
+        
+        refreshGrid();
         
         MenuItem mi_hint = new MenuItem("Pedir dica");
         mi_hint.getStyleClass().setAll("popup");
@@ -118,10 +122,9 @@ public class InGameController implements Initializable {
 
         for (int i=0; i<GRID_SIZE; i++){
             for (int j=0; j<GRID_SIZE; j++){
-                Scene sc = sm.getScene("inGame");
                 String id = "#bt_"+i+""+j+"";
                 
-                Button bt_piece = (Button) sc.lookup(id);
+                Button bt_piece = (Button) getNode(id,"inGame");
                 
                 bt_piece.setContextMenu(cm);
             }
@@ -141,7 +144,7 @@ public class InGameController implements Initializable {
         
         if (state.equals("inGame")){
             Scene sc_menu = sm.getScene("menu");
-            Button bt_restart = (Button) sc_menu.lookup("#bt_restart");
+            Button bt_restart = (Button) getNode("#bt_restart", "menu");
             
             bt_restart.setVisible(true);
         }
@@ -149,7 +152,13 @@ public class InGameController implements Initializable {
         sm.setScene("menu");
     }
     
-    private ContextMenu createPieceContextMenu(){
+    private Object getNode(String id, String fxml){
+        SceneManager sm = Main.getSceneManager();
+        
+        return sm.getScene(fxml).lookup(id);
+    }
+    
+    private ContextMenu createContextMenu(){
         ContextMenu cm = new ContextMenu();
         cm.getStyleClass().setAll("context_menu");
         
@@ -173,7 +182,7 @@ public class InGameController implements Initializable {
                 MenuItem mi_source = (MenuItem) eh.getSource();
                 int index = mi.indexOf(mi_source);
                             
-                if (insertPiece(bt_clicked,mi_source.getText()))
+                if (insertPiece(bt_clicked,mi_source.getText(), "user"))
                     positionedPieces[index]++;
                 
                 if (positionedPieces[index] == n_pieces[index])
@@ -185,12 +194,20 @@ public class InGameController implements Initializable {
         return cm;
     }
     
-    private boolean insertPiece(Button bt_clicked, String piece) {
-        if (bt_clicked.getText().isBlank()){
-            String style = nameMap.get(piece);
+    private boolean insertPiece(Button bt_target, String pieceName, String team) {
+        if (bt_target.getText().isBlank()){
+            String className = nameMap.get(pieceName);
            
-            bt_clicked.getStyleClass().setAll("user", style, "piece");
-            bt_clicked.setText(piece);
+            bt_target.getStyleClass().setAll("user", className, "piece");
+            bt_target.setText(pieceName);
+
+            int row = GridPane.getRowIndex(bt_target);
+            int col = GridPane.getColumnIndex(bt_target);
+            
+            Item piece = ItemFactory.createPiece(className, team);
+            piece.setX(row);
+            piece.setY(col);
+            gameBoard.setAt(row, col, piece);        
         } else {
             return false;
         }        
@@ -222,7 +239,7 @@ public class InGameController implements Initializable {
     }
     
     private void initializeGrid(){
-        ContextMenu cm = createPieceContextMenu();
+        ContextMenu cm = createContextMenu();
         
         for (int i=0; i<GRID_SIZE; i++){
             for (int j=0; j<GRID_SIZE; j++){
@@ -272,6 +289,7 @@ public class InGameController implements Initializable {
     
     private void createNameMap(){
         nameMap = new HashMap();
+        
         
         nameMap.put("Soldado", "soldier");
         nameMap.put("Bomba", "bomb");

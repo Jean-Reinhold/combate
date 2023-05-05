@@ -6,20 +6,16 @@ import com.me.combate.models.ItemModel.StaticItems.Flag;
 
 import java.util.Random;
 
-public class Spy extends Troop {
-    static private final int level = 1;
+public class Marshal extends Troop {
+    static private final int level = 10;
 
-    public Spy(String team) {
+    public Marshal(String team) {
         super(team);
     }
 
     public int attack(GameBoard gameBoard, int x, int y) {
         validateAttack(gameBoard, x, y);
 
-        if (gameBoard.getAt(x, y) instanceof Marshal) {
-            gameBoard.removeAt(gameBoard.getAt(x, y), x, y);
-            return 1;
-        }
         if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
@@ -27,7 +23,7 @@ public class Spy extends Troop {
         if (gameBoard.getAt(x, y) instanceof Flag) {
             return 0;
         }
-        if (gameBoard.getAt(x, y) instanceof Spy) {
+        if (gameBoard.getAt(x, y) instanceof Marshal) {
             Random random = new Random();
             boolean iWin = random.nextBoolean();
             if (iWin) {
