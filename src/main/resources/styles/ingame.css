@@ -8,18 +8,15 @@
     -fx-border-width: 2px;
     -fx-border-style: none;
     -fx-box-sizing: border-box;
-}
-
-.bt_enabled:hover {
-    -fx-background-color: rgb(71,125,67);
-}
-
-.bt_enabled {
     -fx-background-color: rgb(83,173,76);
     -fx-border-color: rgb(71,125,67);
 }
 
-.bt_disabled {
+.bt:hover {
+    -fx-background-color: rgb(71,125,67);
+}
+
+.bt:disabled {
     -fx-background-color: rgb(133,203,126);
     -fx-border-color: rgb(121,175,117);
 }
@@ -64,6 +61,11 @@
 }
 
 .user:hover {
+    -fx-border-color: rgb(63,137,55);
+}
+
+.user:focused {
+    -fx-background-color: rgb(93,167,85);
     -fx-border-color: rgb(63,137,55);
 }
 

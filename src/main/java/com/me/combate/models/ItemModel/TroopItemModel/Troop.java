@@ -14,7 +14,7 @@ public class Troop extends Item {
     }
 
 
-    public void move(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
+    public int move(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         validateMove(gameBoard, x, y);
 
         Item targetItem = gameBoard.getAt(x, y);
@@ -24,11 +24,10 @@ public class Troop extends Item {
         gameBoard.setAt(x, y, this);
         gameBoard.setAt(originalX, originalY, targetItem);
 
-        targetItem.setX(originalX);
-        targetItem.setY(originalY);
-
         setX(x);
         setY(y);
+        
+        return 1;
     }
 
     protected void validateMove(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
