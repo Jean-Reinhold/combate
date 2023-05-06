@@ -16,6 +16,7 @@ import java.util.Set;
 
 public class SceneManager {
     private final Stage stage;
+    private String currentScene;
     private final HashMap<String, Scene> scenes;
 
     public SceneManager(Stage stage) {
@@ -46,6 +47,7 @@ public class SceneManager {
 
     public void setScene(String fxml) {
         stage.setScene(scenes.get(fxml));
+        currentScene = fxml;
     }
 
     public void resetScenes() throws IOException {

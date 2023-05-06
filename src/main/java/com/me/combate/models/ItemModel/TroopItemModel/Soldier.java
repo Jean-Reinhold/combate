@@ -5,7 +5,7 @@ import com.me.combate.exceptions.ItemOutOfBounds;
 import com.me.combate.models.GameBoardModel.GameBoard;
 import com.me.combate.models.ItemModel.StaticItems.Bomb;
 import com.me.combate.models.ItemModel.StaticItems.Flag;
-
+import com.me.combate.models.ItemModel.Item;
 import java.util.Random;
 
 public class Soldier extends Troop {
@@ -43,9 +43,26 @@ public class Soldier extends Troop {
         }
         return 1;
     }
+    
+    protected boolean walk(GameBoard gameBoard, int x, int y, int directionX, int directionY){
+        int posX = getX();
+        int posY = getY();
+        
+        while(posX != x || posY != y){
+            posX += directionX;
+            posY += directionY;
+            
+            Item pieceOnPath = gameBoard.getAt(posX, posY);
+            
+            if (pieceOnPath != null)
+                return true;
+        }
+        
+        return false;
+    }
 
     @Override
-    protected void validateMove(GameBoard gameBoard, int x, int y) {
+    protected void validateMove(GameBoard gameBoard, int x, int y) { 
         if (x < 0) {
             throw new ItemOutOfBounds("New x cannot be negative");
         }
@@ -58,22 +75,32 @@ public class Soldier extends Troop {
         if (y >= gameBoard.getGameBoardSize()) {
             throw new ItemOutOfBounds("New y cannot be greater than or equal to the board size");
         }
-        if (Math.abs(y - getY()) > 1) {
-            throw new IllegalMovement("Cannot go this far on y axis");
-        }
-        if (Math.abs(x - getX()) > 1) {
-            throw new IllegalMovement("Cannot go this far on x axis");
-        }
-        if (Math.abs(x - getX()) > 1) {
-            if ((getY() - y) != 0) {
-                throw new IllegalMovement("Cannot go this far in both directions");
+//        if (Math.abs(y - getY()) > 1) {
+//            throw new IllegalMovement("Cannot go this far on y axis");
+//        }
+//        if (Math.abs(x - getX()) > 1) {
+//            throw new IllegalMovement("Cannot go this far on x axis");
+//        }
+        if (Math.abs(x-getX()) > 1) {
+            if (Math.abs(y-getY()) != 0 && (Math.abs(y-getY()) != Math.abs(x-getX()))) {
+                throw new IllegalMovement("Invalid movement pattern");
             }
         }
-        if (Math.abs(y - getY()) > 1) {
-            if ((this.getX() - x) != 0) {
-                throw new IllegalMovement("Cannot go this far in both directions");
+        
+        if (Math.abs(y-getY()) > 1) {
+            if (Math.abs(x-getX()) != 0 && (Math.abs(y-getY()) != Math.abs(x-getX()))) {
+                throw new IllegalMovement("Invalid movement pattern");
             }
         }
+        
+        if (walk(gameBoard, x,y,(int) Math.signum(x - getX()),(int) Math.signum(y - getY()))) {
+            throw new IllegalMovement("Cannot move through an occupied position");
+        }
+//        if (Math.abs(y - getY()) > 1) {
+//            if ((this.getX() - x) != 0) {
+//                throw new IllegalMovement("Cannot go this far in both directions");
+//            }
+//        }
         if (gameBoard.getAt(x, y) != null) {
             throw new IllegalMovement("Cannot move to an occupied position");
         }

@@ -24,9 +24,6 @@ public class Troop extends Item {
         gameBoard.setAt(x, y, this);
         gameBoard.setAt(originalX, originalY, targetItem);
 
-        targetItem.setX(originalX);
-        targetItem.setY(originalY);
-
         setX(x);
         setY(y);
     }

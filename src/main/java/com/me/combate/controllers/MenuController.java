@@ -7,6 +7,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import com.me.combate.controllers.InGameController;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,21 +29,28 @@ public class MenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
+        String style = "bt_menu";
+        
+        bt_about.getStyleClass().setAll(style);
+        bt_manual.getStyleClass().setAll(style);
+        bt_restart.getStyleClass().setAll(style);
+        bt_exit.getStyleClass().setAll(style);
+        bt_random.getStyleClass().setAll(style);        
     }
 
     @FXML
     private void startGame(ActionEvent event) throws IOException {
         SceneManager sm = Main.getSceneManager();
+        
+        Button clicked_button = (Button) event.getSource();
+        if (clicked_button.getText().equals("Manual")) {
+            InGameController.setGameMode(true);
+        } else {
+            InGameController.setGameMode(false);
+        }
 
         sm.resetScenes();
         sm.setScene("inGame");
-
-        Button clicked_button = (Button) event.getSource();
-        if (clicked_button.getId().equals("bt_manual")) {
-            sm.getStage().setUserData(1);
-        } else {
-            sm.getStage().setUserData(2);
-        }
     }
 
     @FXML

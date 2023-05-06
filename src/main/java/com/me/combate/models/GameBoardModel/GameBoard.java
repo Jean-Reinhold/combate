@@ -5,6 +5,7 @@ import com.me.combate.models.ItemModel.Item;
 
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 public class GameBoard {
     private final int GAMEBOARD_SIZE = 5;
@@ -15,7 +16,6 @@ public class GameBoard {
     public GameBoard() {
         board = new Item[getGameBoardSize()][getGameBoardSize()];
         initializeBoard();
-
     }
 
     public Item getAt(int x, int y) {
@@ -43,9 +43,11 @@ public class GameBoard {
         }
 
         setAt(x, y, item);
-
-        item.setX(x);
-        item.setY(y);
+        
+        if (item != null){
+            item.setX(x);
+            item.setY(y);
+        }
     }
 
     public void removeAt(Item item, int x, int y) {
@@ -86,15 +88,21 @@ public class GameBoard {
 
         for (int i = 0; i < getGameBoardSize(); i++){
             for (int j = 0; j < getGameBoardSize(); j++){
-                String itemType = getAt(i, j).getClass().getName().toLowerCase();
-                counter.put(itemType, counter.get(itemType) + 1);
+                Item piece = getAt(i,j);
+                if (piece == null || piece.getTeam().equals(team))
+                    continue;
+                
+                String itemType = piece.getSubClass();
+                try{
+                    counter.put(itemType, counter.get(itemType) + 1);
+                } catch(NullPointerException npe){}
             }
         }
         return counter;
     }
 
     private void initializeCounter(HashMap<String, Integer> counter){
-        Set<String> itemTypes =  Set.of("general", "gunsmith", "soldier", "spy", "bomb", "flag");
+        Set<String> itemTypes =  Set.of("marshal", "gunsmith", "soldier", "spy", "bomb", "flag");
 
         for (String itemType: itemTypes){
             counter.put(itemType, 0);
