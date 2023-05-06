@@ -6,11 +6,19 @@ import com.me.combate.models.GameBoardModel.GameBoard;
 import com.me.combate.models.ItemModel.Item;
 
 public class Troop extends Item {
-    private int level;
+    protected int level;
     private int x, y;
 
     public Troop(String team) {
         super(team);
+    }
+    
+    public void setLevel(int level){
+        this.level = level;
+    }
+    
+    public int attack(GameBoard gameBoard, int x, int y){
+        return 0;
     }
 
 

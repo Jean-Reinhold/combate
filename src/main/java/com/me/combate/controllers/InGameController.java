@@ -48,9 +48,9 @@ import javafx.scene.control.Label;
 public class InGameController implements Initializable {
     /*------------------------Falta--------------------------
           Movimentação PC
-          Ataque
           Tela de Fim de Jogo 
     Completo:
+    Ataque
     Layout
     Debug
     Mover
@@ -169,7 +169,7 @@ public class InGameController implements Initializable {
                     continue;
                 }
                                 
-                String team = piece.getTeam().toLowerCase();               
+                String team = piece.getTeam();               
                 String className = piece.getSubClass();
 
                 if(piece.getVisibility())
@@ -210,18 +210,20 @@ public class InGameController implements Initializable {
         if (targetPiece == null)
             wasSuccessful = move(row, col);
         else {
-            if (targetPiece instanceof Troop){
+            if (targetPiece.getTeam().equals("user") && targetPiece instanceof Troop){
                 selectedPiece = (Troop) targetPiece;
                 return;
             }
-            
-            wasSuccessful = attack(row, col);
+            if (targetPiece.getTeam().equals("machine"))
+                wasSuccessful = attack(row, col);
         }      
 
         if (wasSuccessful) {
             selectedPiece = null;
+            checkWhoWon();
             gameBoard.setWhoIsPlaying("machine");
             // TURNO DA MÁQUINA
+            checkWhoWon();
             gameBoard.setWhoIsPlaying("user");
             refreshGrid();
             refreshLabels("user");
@@ -315,23 +317,66 @@ public class InGameController implements Initializable {
     
     private boolean move(int x, int y){
         selectedPiece.move(gameBoard,x,y);
-//        if (selectedPiece.move(gameBoard, x, y) == 1)
-//            return true;
-//        
-//        return false;
+
         return true;
     }
     
+    @FXML
+    private void insert(MouseEvent event) {
+    }
+    
     private boolean attack(int x, int y){
-        int battleResult = 0;
+        int battleResult = selectedPiece.attack(gameBoard, x, y);
+        
+        if (battleResult == -1){
+            gameBoard.getAt(x, y).setVisibility(true);
+        }
         
         if (battleResult == 0){
-            //acaba o jogo
+            goToWinScreen("user");
         }
         
         return true;
     }
 
+    private void goToWinScreen(String team){
+        SceneManager sm = Main.getSceneManager();
+        System.out.print(team);
+    }
+    
+    private boolean isThereAnyPieces(String team){
+        HashMap<String, Integer> countValues = gameBoard.itemCount(team);
+        int quantity = 0;
+        
+        for(String className: indexMap.values()){
+            if (className == null)
+                return false;
+            if (className.equals("flag"))
+                continue;
+            try{
+                quantity = countValues.get(className);
+            } catch(NullPointerException npe){return false;}
+            if (quantity > 0)
+                return true;
+        }
+        
+        return false;
+    }
+    
+    private void checkWhoWon(){
+        boolean userState = isThereAnyPieces("user");
+        boolean machineState = isThereAnyPieces("machine");
+        
+        if (!userState && !machineState)
+            goToWinScreen("draw");
+        
+        if (userState && !machineState)
+            goToWinScreen("user");
+        
+        if (!userState && machineState)
+            goToWinScreen("machine");
+    }
+    
     @FXML
     private void goToMenu(ActionEvent event) {
         SceneManager sm = Main.getSceneManager();
@@ -415,6 +460,9 @@ public class InGameController implements Initializable {
             col = GridPane.getColumnIndex(bt_target);
         } catch(Exception e){return false;}
         
+        if (team.equals("user") && row != USER_FLAG_Y && pieceName.equals("Bandeira"))
+            return false;
+        
         if (gameBoard.getAt(row, col) == null){
             String className = nameMap.get(pieceName);
             
@@ -474,6 +522,7 @@ public class InGameController implements Initializable {
                     gameBoard.insertItem(lake, i, j);
                     bt.getStyleClass().setAll("piece", "lake");    
                 } else {
+                    gameBoard.insertItem(null, i, j);
                     bt.getStyleClass().setAll("piece", "ground", "neutral");
                 }
                 
@@ -531,6 +580,7 @@ public class InGameController implements Initializable {
                 continue;
             
             String unknownPieceTeam = unknownPiece.getTeam();
+            System.out.println(unknownPiece);
             
             if (unknownPiece instanceof Bomb && unknownPieceTeam.equals("machine")){
                 hintDialog.setContentText("Bombas foram encontradas!");

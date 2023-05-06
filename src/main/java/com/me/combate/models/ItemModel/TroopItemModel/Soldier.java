@@ -9,15 +9,18 @@ import com.me.combate.models.ItemModel.Item;
 import java.util.Random;
 
 public class Soldier extends Troop {
-    static private final int level = 2;
-
     public Soldier(String team) {
         super(team);
+        this.setLevel(2);
     }
 
     public int attack(GameBoard gameBoard, int x, int y) {
         validateAttack(gameBoard, x, y);
 
+        Item piece = gameBoard.getAt(x, y);
+        if (piece == null)
+            return -2;
+        
         if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
@@ -26,25 +29,24 @@ public class Soldier extends Troop {
             return 0;
         }
         if (gameBoard.getAt(x, y) instanceof Soldier) {
-            Random random = new Random();
-            boolean iWin = random.nextBoolean();
-            if (iWin) {
-                gameBoard.removeAt(gameBoard.getAt(x, y), x, y);
-                return 1;
-            } else {
-                gameBoard.removeAt(this, getX(), getY());
-                return -1;
-            }
-        }
-        Troop opponent = (Troop) gameBoard.getAt(x, y);
+            gameBoard.removeAt(piece, x, y);
+            gameBoard.removeAt(this, getX(), getY());
+            
+            return -3;
+        }        
+        Troop opponent = (Troop) gameBoard.getAt(x, y);        
+        System.out.println(getLevel() + " " + opponent.getLevel());
         if (getLevel() < opponent.getLevel()) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
+        } else {
+            gameBoard.removeAt(this, getX(), getY());
+            gameBoard.insertItem(this,x, y);
+            return 1;
         }
-        return 1;
     }
     
-    protected boolean walk(GameBoard gameBoard, int x, int y, int directionX, int directionY){
+    protected boolean run(GameBoard gameBoard, int x, int y, int directionX, int directionY){
         int posX = getX();
         int posY = getY();
         
@@ -93,7 +95,7 @@ public class Soldier extends Troop {
             }
         }
         
-        if (walk(gameBoard, x,y,(int) Math.signum(x - getX()),(int) Math.signum(y - getY()))) {
+        if (run(gameBoard, x,y,(int) Math.signum(x - getX()),(int) Math.signum(y - getY()))) {
             throw new IllegalMovement("Cannot move through an occupied position");
         }
 //        if (Math.abs(y - getY()) > 1) {

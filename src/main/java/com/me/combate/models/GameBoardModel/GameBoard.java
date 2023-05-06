@@ -85,11 +85,12 @@ public class GameBoard {
 
     public HashMap<String, Integer> itemCount(String team){
         HashMap<String, Integer> counter = new HashMap<String, Integer>();
+        initializeCounter(counter);
 
         for (int i = 0; i < getGameBoardSize(); i++){
             for (int j = 0; j < getGameBoardSize(); j++){
                 Item piece = getAt(i,j);
-                if (piece == null || piece.getTeam().equals(team))
+                if (piece == null || !piece.getTeam().equals(team))
                     continue;
                 
                 String itemType = piece.getSubClass();
