@@ -9,12 +9,16 @@ public class Troop extends Item {
     protected int level;
     private int x, y;
 
+    public enum AttackResult {
+        LOST, WON, DRAW, FINISHED_GAME
+    }
+
     public Troop(String team) {
         super(team);
     }
 
-    public int attack(GameBoard gameBoard, int x, int y) {
-        return 0;
+    public AttackResult attack(GameBoard gameBoard, int x, int y) {
+        return AttackResult.DRAW;
     }
 
     public void move(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {

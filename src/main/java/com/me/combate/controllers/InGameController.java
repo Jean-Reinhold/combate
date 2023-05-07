@@ -312,13 +312,13 @@ public class InGameController implements Initializable {
     }
     
     private boolean attack(int x, int y){
-        int battleResult = selectedPiece.attack(gameBoard, x, y);
+        Troop.AttackResult battleResult = selectedPiece.attack(gameBoard, x, y);
         
-        if (battleResult == -1){
+        if (battleResult == Troop.AttackResult.LOST){
             gameBoard.getAt(x, y).setVisibility(true);
         }
         
-        if (battleResult == 0){
+        if (battleResult == Troop.AttackResult.FINISHED_GAME){
             goToWinScreen("user");
         }
         

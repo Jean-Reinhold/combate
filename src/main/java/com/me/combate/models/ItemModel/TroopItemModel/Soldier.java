@@ -13,35 +13,33 @@ public class Soldier extends Troop {
         this.setLevel(2);
     }
 
-    public int attack(GameBoard gameBoard, int x, int y) {
+    public AttackResult attack(GameBoard gameBoard, int x, int y) {
         validateAttack(gameBoard, x, y);
 
         Item piece = gameBoard.getAt(x, y);
-        if (piece == null)
-            return -2;
 
         if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(this, getX(), getY());
-            return -1;
+            return AttackResult.LOST;
         }
         if (gameBoard.getAt(x, y) instanceof Flag) {
-            return 0;
+            return AttackResult.FINISHED_GAME;
         }
         if (gameBoard.getAt(x, y) instanceof Soldier) {
             gameBoard.removeAt(piece, x, y);
             gameBoard.removeAt(this, getX(), getY());
 
-            return -3;
+            return AttackResult.DRAW;
         }
+
         Troop opponent = (Troop) gameBoard.getAt(x, y);
-        System.out.println(getLevel() + " " + opponent.getLevel());
         if (getLevel() < opponent.getLevel()) {
             gameBoard.removeAt(this, getX(), getY());
-            return -1;
+            return AttackResult.LOST;
         } else {
             gameBoard.removeAt(this, getX(), getY());
             gameBoard.insertItem(this, x, y);
-            return 1;
+            return AttackResult.WON;
         }
     }
 
