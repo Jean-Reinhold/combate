@@ -188,7 +188,7 @@ public class InGameController implements Initializable {
         if (gameBoard.getWhoIsPlaying().equals("machine"))
             return;
 
-        boolean wasSuccessful = true;
+        boolean wasSuccessful = false;
         
         int row = GridPane.getRowIndex(bt_clicked);
         int col = GridPane.getColumnIndex(bt_clicked);
@@ -240,6 +240,7 @@ public class InGameController implements Initializable {
         cm.getStyleClass().setAll("context_menu");
         
         MenuItem mi_hint = new MenuItem("Pedir dica");
+        mi_hint.setId("mi_hint");
         mi_hint.getStyleClass().setAll("popup");
         mi_hint.setOnAction(eh -> {
             Button bt_clicked = (Button) getFocusedNode("inGame");
@@ -341,25 +342,22 @@ public class InGameController implements Initializable {
 
     private void goToWinScreen(String team){
         SceneManager sm = Main.getSceneManager();
-        System.out.print(team);
     }
     
     private boolean isThereAnyPieces(String team){
         HashMap<String, Integer> countValues = gameBoard.itemCount(team);
-        int quantity = 0;
+        int quantity;
         
-        for(String className: indexMap.values()){
-            if (className == null)
-                return false;
+        for(String className: nameMap.values()){
             if (className.equals("flag"))
                 continue;
-            try{
-                quantity = countValues.get(className);
-            } catch(NullPointerException npe){return false;}
-            if (quantity > 0)
+
+            quantity = countValues.get(className);
+            if (quantity > 0){
                 return true;
+            }
         }
-        
+        System.out.println("4");
         return false;
     }
     
@@ -408,6 +406,7 @@ public class InGameController implements Initializable {
     
     private ContextMenu createContextMenu(){
         ContextMenu cm = new ContextMenu();
+        cm.setId("cm_positioning");
         cm.getStyleClass().setAll("context_menu");
         
         ArrayList<MenuItem> mi = new ArrayList();
@@ -420,6 +419,7 @@ public class InGameController implements Initializable {
         cm.getItems().addAll(mi);
         
         for (int k=0; k<UNIQUE_PIECES; k++){
+            mi.get(k).setId("mi_"+k);
             mi.get(k).getStyleClass().setAll("popup");
             mi.get(k).setOnAction(eh -> {
                 Button bt_clicked = (Button) getFocusedNode("inGame");

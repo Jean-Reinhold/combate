@@ -84,7 +84,7 @@ public class GameBoard {
     }
 
     public HashMap<String, Integer> itemCount(String team){
-        HashMap<String, Integer> counter = new HashMap<String, Integer>();
+        HashMap<String, Integer> counter = new HashMap();
         initializeCounter(counter);
 
         for (int i = 0; i < getGameBoardSize(); i++){
