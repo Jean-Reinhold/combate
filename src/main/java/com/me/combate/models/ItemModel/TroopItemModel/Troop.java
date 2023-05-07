@@ -12,15 +12,10 @@ public class Troop extends Item {
     public Troop(String team) {
         super(team);
     }
-    
-    public void setLevel(int level){
-        this.level = level;
-    }
-    
-    public int attack(GameBoard gameBoard, int x, int y){
+
+    public int attack(GameBoard gameBoard, int x, int y) {
         return 0;
     }
-
 
     public void move(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         validateMove(gameBoard, x, y);
@@ -83,5 +78,9 @@ public class Troop extends Item {
 
     public int getLevel() {
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
     }
 }

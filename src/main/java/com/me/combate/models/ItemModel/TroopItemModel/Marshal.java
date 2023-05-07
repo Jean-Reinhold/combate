@@ -5,8 +5,6 @@ import com.me.combate.models.ItemModel.Item;
 import com.me.combate.models.ItemModel.StaticItems.Bomb;
 import com.me.combate.models.ItemModel.StaticItems.Flag;
 
-import java.util.Random;
-
 public class Marshal extends Troop {
 
     public Marshal(String team) {
@@ -20,7 +18,7 @@ public class Marshal extends Troop {
         Item piece = gameBoard.getAt(x, y);
         if (piece == null)
             return -2;
-        
+
         if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
@@ -31,17 +29,17 @@ public class Marshal extends Troop {
         if (gameBoard.getAt(x, y) instanceof Marshal) {
             gameBoard.removeAt(piece, x, y);
             gameBoard.removeAt(this, getX(), getY());
-            
+
             return -3;
         }
         Troop opponent = (Troop) gameBoard.getAt(x, y);
-        
+
         if (getLevel() < opponent.getLevel()) {
             gameBoard.removeAt(this, getX(), getY());
             return -1;
         } else {
             gameBoard.removeAt(this, getX(), getY());
-            gameBoard.insertItem(this,x, y);
+            gameBoard.insertItem(this, x, y);
             return 1;
         }
     }

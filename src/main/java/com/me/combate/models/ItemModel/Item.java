@@ -9,12 +9,12 @@ public class Item {
     public Item(String team) {
         this.team = team;
     }
-    
-    public boolean getVisibility(){
+
+    public boolean getVisibility() {
         return visibility;
     }
-    
-    public void setVisibility(boolean visibility){
+
+    public void setVisibility(boolean visibility) {
         this.visibility = visibility;
     }
 
@@ -41,11 +41,11 @@ public class Item {
     public void setY(int y) {
         this.y = y;
     }
-    
-    public String getSubClass(){
+
+    public String getSubClass() {
         String className = this.getClass().getName();
         int startSubClassIndex = className.lastIndexOf('.') + 1;
-        
+
         return className.substring(startSubClassIndex).toLowerCase();
     }
 }

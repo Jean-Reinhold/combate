@@ -6,17 +6,18 @@ import com.me.combate.models.ItemModel.TroopItemModel.Gunsmith;
 import com.me.combate.models.ItemModel.TroopItemModel.Marshal;
 import com.me.combate.models.ItemModel.TroopItemModel.Soldier;
 import com.me.combate.models.ItemModel.TroopItemModel.Spy;
-import com.me.combate.models.ItemModel.TroopItemModel.Troop;
 
 public class ItemFactory {
     public static Item createPiece(String type, String team) {
         Item piece;
         String className = type;
-        
-        try{
+
+        try {
             className = className.toLowerCase();
-        } catch(Exception e){return null;}
-        
+        } catch (Exception e) {
+            return null;
+        }
+
         switch (className) {
             case "marshal":
                 piece = new Marshal(team);
