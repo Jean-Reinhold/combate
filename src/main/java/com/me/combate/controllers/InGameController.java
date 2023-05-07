@@ -10,41 +10,23 @@ import com.me.combate.models.GameBoardModel.GameBoard;
 import com.me.combate.models.GameSettings;
 import com.me.combate.models.ItemModel.Item;
 import com.me.combate.models.ItemModel.ItemFactory;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
-import javafx.scene.text.TextAlignment;
-import javafx.scene.control.Alert;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Random;
-import java.util.Set;
-import java.util.ResourceBundle;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import java.util.HashMap;
-import com.me.combate.models.ItemModel.Item;
-import com.me.combate.models.ItemModel.ItemFactory;
 import com.me.combate.models.ItemModel.StaticItems.Bomb;
-import com.me.combate.models.ItemModel.StaticItems.Flag;
 import com.me.combate.models.ItemModel.StaticItems.Lake;
 import com.me.combate.models.ItemModel.TroopItemModel.Troop;
-import com.me.combate.models.ItemModel.TroopItemModel.Soldier;
-import com.me.combate.models.ItemModel.TroopItemModel.Gunsmith;
-import com.me.combate.models.ItemModel.TroopItemModel.Marshal;
-import com.me.combate.models.ItemModel.TroopItemModel.Spy;
 import javafx.application.Platform;
-import javafx.scene.control.Label;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.GridPane;
+
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Random;
+import java.util.ResourceBundle;
+import java.util.stream.IntStream;
 
 public class InGameController implements Initializable {
     /*------------------------Falta--------------------------
@@ -54,14 +36,17 @@ public class InGameController implements Initializable {
           IA do computador
     */
     private static boolean gameMode = true;
-    private GameSettings gameSettings = new GameSettings();
-    private int lakeRow, lakeCol;
+    private final GameSettings gameSettings = new GameSettings();
     private int counterOfHints = 0;
-    private String state = "positioning";
-    private int[] individualQuantities = new int[gameSettings.UNIQUE_PIECES];
-    private int[] positionedPieces = new int[gameSettings.UNIQUE_PIECES];
-    private HashMap < Integer, String > indexMap = new HashMap();
-    private HashMap < String, String > nameMap = new HashMap();
+
+    private enum GamePlayState{
+            POSITIONING_PIECES, IN_GAME, DEBUG
+    }
+    private GamePlayState state = GamePlayState.POSITIONING_PIECES;
+    private int[] individualQuantities = new int[GameSettings.PLAYER_TOTAL_NUMBER_OF_PIECES];
+    private int[] positionedPieces = new int[GameSettings.PLAYER_TOTAL_NUMBER_OF_PIECES];
+    private final HashMap<Integer, String> indexMap = new HashMap();
+    private final HashMap<String, String> nameMap = new HashMap();
 
     private Troop selectedPiece = null;
     private GameBoard gameBoard;
@@ -98,12 +83,16 @@ public class InGameController implements Initializable {
     @FXML
     private Label lb_user_bomb;
 
+    public static void setGameMode(boolean state) {
+        gameMode = state;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         bt_back.getStyleClass().setAll("bt");
         bt_debug.getStyleClass().setAll("bt");
         bt_begin.getStyleClass().setAll("bt");
-        // Executa após o load do controller. Motivo: má formação dos dados caso contrário
+        // Inicializa código depois da stage
         Platform.runLater(() -> {
             initializeVariables();
             initializeGrid();
@@ -119,33 +108,33 @@ public class InGameController implements Initializable {
     }
 
     private void refreshLabels(String team) {
-        HashMap < String, Integer > countValues = gameBoard.itemCount(team);
+        HashMap<String, Integer> countValues = gameBoard.itemCount(team);
 
-        for (String className: nameMap.values()) {
+        for (String className : nameMap.values()) {
             Integer quantity = countValues.get(className);
             String id = "#lb_" + team + "_" + className;
             try {
                 Label lb = (Label) getNode(id, "inGame");
                 lb.setText(lb.getText().replaceFirst("\\d+", quantity.toString()));
             } catch (NullPointerException npe) {
-                return;
+                continue;
             }
         }
 
     }
 
     private void refreshGrid() {
-        for (int i = 0; i < gameSettings.GRID_SIZE; i++) {
-            for (int j = 0; j < gameSettings.GRID_SIZE; j++) {
+        for (int i = 0; i < GameSettings.GRID_SIZE; i++) {
+            for (int j = 0; j < GameSettings.GRID_SIZE; j++) {
                 Item piece = gameBoard.getAt(i, j);
 
-                String id = "#bt_" + i + "" + j + "";
+                String id = "#bt_" + i + j;
                 Button bt = (Button) getNode(id, "inGame");
 
                 if (bt == null)
                     return;
 
-                if (i == lakeRow && j == lakeCol) {
+                if (i == gameBoard.getLakeRow() && j == gameBoard.getLakeCol()) {
                     bt.getStyleClass().setAll("piece", "lake");
                     continue;
                 }
@@ -164,10 +153,6 @@ public class InGameController implements Initializable {
                     bt.getStyleClass().setAll("piece", team);
             }
         }
-    }
-
-    public static void setGameMode(boolean state) {
-        gameMode = state;
     }
 
     private void inGameButtonBehavior(Button bt_clicked) {
@@ -211,11 +196,13 @@ public class InGameController implements Initializable {
 
         if (wasSuccessful) {
             selectedPiece = null;
-            checkWhoWon();
+
             gameBoard.setWhoIsPlaying("machine");
-            // TURNO DA MÁQUINA
             checkWhoWon();
+
             gameBoard.setWhoIsPlaying("user");
+            checkWhoWon();
+
             refreshGrid();
             refreshLabels("user");
             refreshLabels("machine");
@@ -223,6 +210,9 @@ public class InGameController implements Initializable {
     }
 
     private void machineTurn() {
+        // Selecionar uma peça própria aleatória
+        // Selecionar uma posição válida para movimentação ou ataque
+        // Realizo a operação (Attack ou Move)
 
     }
 
@@ -243,14 +233,14 @@ public class InGameController implements Initializable {
 
         cm.getItems().add(mi_hint);
 
-        for (int i = 0; i < gameSettings.GRID_SIZE; i++) {
-            for (int j = 0; j < gameSettings.GRID_SIZE; j++) {
-                String id = "#bt_" + i + "" + j + "";
+        for (int i = 0; i < GameSettings.GRID_SIZE; i++) {
+            for (int j = 0; j < GameSettings.GRID_SIZE; j++) {
+                String id = "#bt_" + i + j;
 
                 Button bt_piece = (Button) getNode(id, "inGame");
                 bt_piece.setContextMenu(cm);
 
-                if (i == lakeRow && j == lakeCol)
+                if (i == gameBoard.getLakeRow() && j == gameBoard.getLakeCol())
                     continue;
 
                 bt_piece.setOnMouseClicked(eh -> {
@@ -265,26 +255,23 @@ public class InGameController implements Initializable {
         inGameButtonConfiguration();
 
         if (gameBoard.isDebugging())
-            showPieces(0, gameSettings.MACHINE_MAX_Y, false);
+            showPieces(0, GameSettings.MACHINE_MAX_Y, false);
 
         gameBoard.setWhoIsPlaying("user");
         bt_begin.setVisible(false);
         bt_debug.setDisable(true);
-        state = "inGame";
+        state = GamePlayState.IN_GAME;
     }
 
     @FXML
     private void showDebugView(ActionEvent event) {
-        if (state.equals("inGame"))
-            return;
-
-        showPieces(0, gameSettings.MACHINE_MAX_Y, !gameBoard.isDebugging());
+        showPieces(0, GameSettings.MACHINE_MAX_Y, !gameBoard.isDebugging());
         gameBoard.setIsDebugging(!gameBoard.isDebugging());
     }
 
     private void showPieces(int start, int end, boolean visibility) {
         for (int i = start; i < end; i++)
-            for (int j = 0; j < gameSettings.GRID_SIZE; j++)
+            for (int j = 0; j < GameSettings.GRID_SIZE; j++)
                 toggleVisibleState(i, j, visibility);
     }
 
@@ -296,7 +283,7 @@ public class InGameController implements Initializable {
 
         String pieceTeam = piece.getTeam();
         String pieceName = piece.getSubClass();
-        String id = "#bt_" + row + "" + col + "";
+        String id = "#bt_" + row + col;
 
         Button bt_target = (Button) getNode(id, "inGame");
         piece.setVisibility(visibility);
@@ -314,7 +301,8 @@ public class InGameController implements Initializable {
     }
 
     @FXML
-    private void insert(MouseEvent event) {}
+    private void insert(MouseEvent event) {
+    }
 
     private boolean attack(int x, int y) {
         Troop.AttackResult battleResult = selectedPiece.attack(gameBoard, x, y);
@@ -335,10 +323,10 @@ public class InGameController implements Initializable {
     }
 
     private boolean isThereAnyPieces(String team) {
-        HashMap < String, Integer > countValues = gameBoard.itemCount(team);
+        HashMap<String, Integer> countValues = gameBoard.itemCount(team);
         int quantity;
 
-        for (String className: nameMap.values()) {
+        for (String className : nameMap.values()) {
             if (className.equals("flag"))
                 continue;
 
@@ -347,7 +335,6 @@ public class InGameController implements Initializable {
                 return true;
             }
         }
-        System.out.println("4");
         return false;
     }
 
@@ -369,7 +356,7 @@ public class InGameController implements Initializable {
     private void goToMenu(ActionEvent event) {
         SceneManager sm = Main.getSceneManager();
 
-        if (state.equals("inGame")) {
+        if (state == GamePlayState.IN_GAME) {
             Button bt_restart = (Button) getNode("#bt_restart", "menu");
             bt_restart.setVisible(true);
         }
@@ -400,7 +387,7 @@ public class InGameController implements Initializable {
         cm.setId("cm_positioning");
         cm.getStyleClass().setAll("context_menu");
 
-        ArrayList < MenuItem > mi = new ArrayList();
+        ArrayList<MenuItem> mi = new ArrayList();
         mi.add(new MenuItem("Soldado"));
         mi.add(new MenuItem("Espião"));
         mi.add(new MenuItem("Cabo Armeiro"));
@@ -409,13 +396,16 @@ public class InGameController implements Initializable {
         mi.add(new MenuItem("Bomba"));
         cm.getItems().addAll(mi);
 
-        for (int k = 0; k < gameSettings.UNIQUE_PIECES; k++) {
+        for (int k = 0; k < GameSettings.PLAYER_TOTAL_NUMBER_OF_PIECES; k++) {
             mi.get(k).setId("mi_" + k);
             mi.get(k).getStyleClass().setAll("popup");
             mi.get(k).setOnAction(eh -> {
+                System.out.print("Núemro de pecas individuais posicionadas");
+                for (int i: positionedPieces){
+                    System.out.print(" " + i);
+                }
+                System.out.println();
                 Button bt_clicked = (Button) getFocusedNode("inGame");
-
-                int[] n_pieces = individualQuantities;
 
                 MenuItem mi_source = (MenuItem) eh.getSource();
                 int index = mi.indexOf(mi_source);
@@ -423,7 +413,7 @@ public class InGameController implements Initializable {
                 if (insertPiece(bt_clicked, mi_source.getText(), "user"))
                     positionedPieces[index]++;
 
-                if (2 * positionedPieces[index] == n_pieces[index])
+                if (2 * positionedPieces[index] == individualQuantities[index])
                     cm.getItems().remove(mi_source);
 
                 if (isFull()) {
@@ -438,9 +428,7 @@ public class InGameController implements Initializable {
     }
 
     private boolean isFull() {
-        if (2 * getAbsoluteQuantity(positionedPieces) == getAbsoluteQuantity(individualQuantities))
-            return true;
-        return false;
+        return 2 * getAbsoluteQuantity(positionedPieces) == getAbsoluteQuantity(individualQuantities);
     }
 
     private boolean insertPiece(Button bt_target, String pieceName, String team) {
@@ -453,7 +441,7 @@ public class InGameController implements Initializable {
             return false;
         }
 
-        if (team.equals("user") && row != gameSettings.USER_FLAG_Y && pieceName.equals("Bandeira"))
+        if (team.equals("user") && row != GameSettings.USER_FLAG_Y && pieceName.equals("Bandeira"))
             return false;
 
         if (gameBoard.getAt(row, col) == null) {
@@ -465,11 +453,9 @@ public class InGameController implements Initializable {
 
             bt_target.setText(pieceName);
             bt_target.getStyleClass().setAll("piece", className, team);
-        } else {
-            return false;
         }
+        return false;
 
-        return true;
     }
 
     private void initializeVariables() {
@@ -485,21 +471,21 @@ public class InGameController implements Initializable {
         positionedPieces = fillVector(positionedPieces, init);
 
         Random rand = new Random();
-        lakeRow = 2;
-        lakeCol = rand.nextInt(5);
+        gameBoard.setLakeRow(2);
+        gameBoard.setLakeCol(rand.nextInt(GameSettings.GRID_SIZE));
     }
 
     private void initializeGrid() {
         ContextMenu cm = createContextMenu();
 
-        for (int i = 0; i < gameSettings.GRID_SIZE; i++) {
-            for (int j = 0; j < gameSettings.GRID_SIZE; j++) {
+        for (int i = 0; i < GameSettings.GRID_SIZE; i++) {
+            for (int j = 0; j < GameSettings.GRID_SIZE; j++) {
                 Button bt = new Button();
-                bt.setId("bt_" + i + "" + j);
+                bt.setId("bt_" + i + j);
 
-                if (i >= gameSettings.USER_MIN_Y) {
+                if (i >= GameSettings.USER_MIN_Y) {
                     bt.setOnContextMenuRequested(eh -> {
-                        if (state.equals("inGame"))
+                        if (state == GamePlayState.IN_GAME)
                             return;
 
                         if (!bt_begin.isDisable()) {
@@ -510,7 +496,7 @@ public class InGameController implements Initializable {
                     bt.setContextMenu(cm);
                 }
 
-                if ((i == lakeRow) && (j == lakeCol)) {
+                if ((i == gameBoard.getLakeRow()) && (j == gameBoard.getLakeCol())) {
                     Item lake = new Lake("neutral");
                     gameBoard.insertItem(lake, i, j);
                     bt.getStyleClass().setAll("piece", "lake");
@@ -533,7 +519,7 @@ public class InGameController implements Initializable {
     private int getAbsoluteQuantity(int[] v) {
         int sum = 0;
 
-        for (int n: v)
+        for (int n : v)
             sum += n;
 
         return sum;
@@ -558,7 +544,7 @@ public class InGameController implements Initializable {
     }
 
     private void giveHint(int col) {
-        if (counterOfHints == gameSettings.HINT_MAX)
+        if (counterOfHints == GameSettings.HINT_MAX)
             return;
         boolean hintFlag = false;
         Alert hintDialog = new Alert(Alert.AlertType.INFORMATION);
@@ -566,15 +552,13 @@ public class InGameController implements Initializable {
         hintDialog.setHeaderText("");
 
         counterOfHints++;
-        for (int i = 0; i < gameSettings.GRID_SIZE; i++) {
+        for (int i = 0; i < GameSettings.GRID_SIZE; i++) {
             Item unknownPiece = gameBoard.getAt(i, col);
 
             if (unknownPiece == null)
                 continue;
 
             String unknownPieceTeam = unknownPiece.getTeam();
-            System.out.println(unknownPiece);
-
             if (unknownPiece instanceof Bomb && unknownPieceTeam.equals("machine")) {
                 hintFlag = true;
                 break;
@@ -598,18 +582,18 @@ public class InGameController implements Initializable {
         String id;
 
         if (team.equals("user"))
-            flagRow = gameSettings.USER_FLAG_Y;
+            flagRow = GameSettings.USER_FLAG_Y;
         else
-            flagRow = gameSettings.MACHINE_FLAG_Y;
+            flagRow = GameSettings.MACHINE_FLAG_Y;
 
         Random rand = new Random();
 
-        int flagCol = rand.nextInt(gameSettings.GRID_SIZE);
+        int flagCol = rand.nextInt(GameSettings.GRID_SIZE);
         positionedPieces[4]++;
 
         for (int i = start; i < end; i++) {
-            for (int j = 0; j < gameSettings.GRID_SIZE; j++) {
-                id = "#bt_" + i + "" + j + "";
+            for (int j = 0; j < GameSettings.GRID_SIZE; j++) {
+                id = "#bt_" + i + j;
                 bt_target = (Button) getNode(id, "inGame");
                 if (i == flagRow && j == flagCol) {
                     insertPiece(bt_target, "Bandeira", team);

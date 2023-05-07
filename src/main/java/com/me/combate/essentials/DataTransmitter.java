@@ -5,17 +5,16 @@
 package com.me.combate.essentials;
 
 /**
- *
  * @author rafaelboeira
  */
 public class DataTransmitter {
     Object data = new Object();
-    
-    public void setData(Object data){
-        this.data = data;
-    }
-    
-    public Object getData(){
+
+    public Object getData() {
         return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }

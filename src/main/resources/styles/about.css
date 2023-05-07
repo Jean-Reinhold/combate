@@ -4,14 +4,14 @@
     -fx-max-height: 40px;
     -fx-min-width: 100px;
     -fx-min-height: 40px;
-    -fx-background-color: rgb(83,173,76);
-    -fx-text-fill: rgb(255,255,255);
+    -fx-background-color: rgb(83, 173, 76);
+    -fx-text-fill: rgb(255, 255, 255);
     -fx-border-width: 2px;
     -fx-border-style: none;
-    -fx-border-color: rgb(71,125,67);
+    -fx-border-color: rgb(71, 125, 67);
     -fx-box-sizing: border-box;
 }
 
 .bt_menu:hover {
-    -fx-background-color: rgb(71,125,67);
+    -fx-background-color: rgb(71, 125, 67);
 }

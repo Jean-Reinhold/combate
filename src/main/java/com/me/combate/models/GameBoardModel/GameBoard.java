@@ -4,11 +4,14 @@ import com.me.combate.exceptions.ItemOutOfBounds;
 import com.me.combate.models.ItemModel.Item;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 public class GameBoard {
     private final int GAMEBOARD_SIZE = 5;
     private final Item[][] board;
+    private int lakeRow = 2;
+    private int lakeCol = 2;
     private boolean debug = false;
     private String whoIsPlaying = "user";
 
@@ -33,7 +36,7 @@ public class GameBoard {
         }
     }
 
-    public void insertItem(Item item, int x, int y) {
+    public void insertItem(Item item, int x, int y) throws ItemOutOfBounds{
         if (x >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on x = " + x);
         }
@@ -82,6 +85,22 @@ public class GameBoard {
         this.whoIsPlaying = whoIsPlaying;
     }
 
+    public int getLakeRow() {
+        return lakeRow;
+    }
+
+    public void setLakeRow(int lakeRow) {
+        this.lakeRow = lakeRow;
+    }
+
+    public int getLakeCol() {
+        return lakeCol;
+    }
+
+    public void setLakeCol(int lakeCol) {
+        this.lakeCol = lakeCol;
+    }
+
     public HashMap<String, Integer> itemCount(String team) {
         HashMap<String, Integer> counter = new HashMap();
         initializeCounter(counter);
@@ -109,4 +128,6 @@ public class GameBoard {
             counter.put(itemType, 0);
         }
     }
+
+    // public List<List<Integer>> getMachinePossibleAttacks
 }

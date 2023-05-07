@@ -9,10 +9,6 @@ public class Troop extends Item {
     protected int level;
     private int x, y;
 
-    public enum AttackResult {
-        LOST, WON, DRAW, FINISHED_GAME
-    }
-
     public Troop(String team) {
         super(team);
     }
@@ -86,5 +82,9 @@ public class Troop extends Item {
 
     public void setLevel(int level) {
         this.level = level;
+    }
+
+    public enum AttackResult {
+        LOST, WON, DRAW, FINISHED_GAME
     }
 }

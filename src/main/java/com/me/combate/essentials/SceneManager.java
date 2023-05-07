@@ -16,8 +16,8 @@ import java.util.Set;
 
 public class SceneManager {
     private final Stage stage;
-    private String currentScene;
     private final HashMap<String, Scene> scenes;
+    private String currentScene;
 
     public SceneManager(Stage stage) {
         this.stage = stage;
