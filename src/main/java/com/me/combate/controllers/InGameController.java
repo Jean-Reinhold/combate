@@ -50,6 +50,7 @@ public class InGameController implements Initializable {
           Movimentação PC
           Tela de Fim de Jogo 
     Completo:
+    Condição de Parada
     Ataque
     Layout
     Debug
@@ -567,7 +568,7 @@ public class InGameController implements Initializable {
     private void giveHint(int col) {
         if (counterOfHints == HINT_MAX)
             return;
-        
+        boolean hintFlag = false;
         Alert hintDialog = new Alert(Alert.AlertType.INFORMATION);
         hintDialog.setTitle("Dica");
         hintDialog.setHeaderText("");
@@ -583,15 +584,18 @@ public class InGameController implements Initializable {
             System.out.println(unknownPiece);
             
             if (unknownPiece instanceof Bomb && unknownPieceTeam.equals("machine")){
-                hintDialog.setContentText("Bombas foram encontradas!");
-                hintDialog.show();
-                break;
-            } else {
-                hintDialog.setContentText("Nenhuma bomba encontrada!");
-                hintDialog.show();
+                hintFlag = true;
                 break;
             }
         }
+        if (hintFlag){
+            hintDialog.setContentText("Bombas foram encontradas!");
+            hintDialog.show();
+            return;
+        }
+        
+        hintDialog.setContentText("Nenhuma bomba encontrada!");
+        hintDialog.show();
     }
     
     private void createRandomPieces(int start, int end, String team) {
