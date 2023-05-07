@@ -31,7 +31,7 @@ public class Troop extends Item {
         setY(y);
     }
 
-    protected void validateMove(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
+    public void validateMove(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         if (x < 0) {
             throw new ItemOutOfBounds("New x cannot be negative");
         }
@@ -55,7 +55,7 @@ public class Troop extends Item {
         }
     }
 
-    protected void validateAttack(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
+    public void validateAttack(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         if (x < 0) {
             throw new ItemOutOfBounds("Target x cannot be negative");
         }
@@ -73,6 +73,9 @@ public class Troop extends Item {
         }
         if (gameBoard.getAt(x, y) == null) {
             throw new IllegalMovement("Cannot attack an empty position");
+        }
+        if (gameBoard.getAt(x, y).getTeam().equals(this.getTeam())) {
+            throw new IllegalMovement("Cannot attack the same team");
         }
     }
 

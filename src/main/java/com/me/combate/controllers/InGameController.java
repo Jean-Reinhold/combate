@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
- */
 package com.me.combate.controllers;
 
 import com.me.combate.Main;
@@ -22,10 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Random;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.IntStream;
 
 public class InGameController implements Initializable {
@@ -36,18 +29,12 @@ public class InGameController implements Initializable {
           IA do computador
     */
     private static boolean gameMode = true;
-    private final GameSettings gameSettings = new GameSettings();
+    private final Map<Integer, String> indexMap = Map.of(0, "Soldado", 1, "Espião", 2, "Cabo Armeiro", 3, "Marechal", 4, "Bandeira", 5, "Bomba");
+    private final Map<String, String> nameMap = Map.of("Soldado", "soldier", "Espião", "spy", "Cabo Armeiro", "gunsmith", "Marechal", "marshal", "Bandeira", "flag", "Bomba", "bomb");
+    private final int[] individualQuantities = IntStream.of(6, 2, 4, 2, 2, 4).toArray();
     private int counterOfHints = 0;
-
-    private enum GamePlayState{
-            POSITIONING_PIECES, IN_GAME, DEBUG
-    }
     private GamePlayState state = GamePlayState.POSITIONING_PIECES;
-    private int[] individualQuantities = new int[GameSettings.PLAYER_TOTAL_NUMBER_OF_PIECES];
     private int[] positionedPieces = new int[GameSettings.PLAYER_TOTAL_NUMBER_OF_PIECES];
-    private final HashMap<Integer, String> indexMap = new HashMap();
-    private final HashMap<String, String> nameMap = new HashMap();
-
     private Troop selectedPiece = null;
     private GameBoard gameBoard;
     @FXML
@@ -58,30 +45,6 @@ public class InGameController implements Initializable {
     private Button bt_debug;
     @FXML
     private Button bt_back;
-    @FXML
-    private Label lb_machine_soldier;
-    @FXML
-    private Label lb_machine_gunsmith;
-    @FXML
-    private Label lb_machine_spy;
-    @FXML
-    private Label lb_machine_marshal;
-    @FXML
-    private Label lb_machine_flag;
-    @FXML
-    private Label lb_machine_bomb;
-    @FXML
-    private Label lb_user_soldier;
-    @FXML
-    private Label lb_user_gunsmith;
-    @FXML
-    private Label lb_user_spy;
-    @FXML
-    private Label lb_user_marshal;
-    @FXML
-    private Label lb_user_flag;
-    @FXML
-    private Label lb_user_bomb;
 
     public static void setGameMode(boolean state) {
         gameMode = state;
@@ -179,7 +142,7 @@ public class InGameController implements Initializable {
         }
 
         if (targetPiece == null)
-            wasSuccessful = move(row, col);
+            wasSuccessful = move(selectedPiece, row, col);
         else {
             if (targetPiece.getTeam().equals("user") && targetPiece instanceof Troop) {
                 selectedPiece = (Troop) targetPiece;
@@ -189,7 +152,7 @@ public class InGameController implements Initializable {
                 if (selectedPiece == null) {
                     return;
                 }
-                wasSuccessful = attack(row, col);
+                wasSuccessful = attack(selectedPiece, row, col);
             }
 
         }
@@ -197,11 +160,12 @@ public class InGameController implements Initializable {
         if (wasSuccessful) {
             selectedPiece = null;
 
+            checkWhoWon();
             gameBoard.setWhoIsPlaying("machine");
-            checkWhoWon();
+            machineTurn();
 
-            gameBoard.setWhoIsPlaying("user");
             checkWhoWon();
+            gameBoard.setWhoIsPlaying("user");
 
             refreshGrid();
             refreshLabels("user");
@@ -210,10 +174,50 @@ public class InGameController implements Initializable {
     }
 
     private void machineTurn() {
-        // Selecionar uma peça própria aleatória
-        // Selecionar uma posição válida para movimentação ou ataque
-        // Realizo a operação (Attack ou Move)
+        Random random = new Random();
+        ArrayList<Troop> machineTroops = gameBoard.getMachineTroops();
 
+        for (Troop troop : machineTroops) {
+            ArrayList<ArrayList<Integer>> attacks = gameBoard.getTroopPossibleAttacks(troop);
+            ArrayList<ArrayList<Integer>> moves = gameBoard.getTroopPossibleMoves(troop);
+
+            if (moves.isEmpty() && attacks.isEmpty()) {
+                continue;
+            }
+            if (moves.isEmpty()) {
+                ArrayList<Integer> coordinates = attacks.get(0);
+                int x = coordinates.get(0);
+                int y = coordinates.get(1);
+
+                attack(troop, x, y);
+                return;
+            }
+            if (attacks.isEmpty()) {
+                ArrayList<Integer> coordinates = moves.get(0);
+                int x = coordinates.get(0);
+                int y = coordinates.get(1);
+
+                move(troop, x, y);
+                return;
+            }
+
+            if (random.nextBoolean()) {
+                ArrayList<Integer> coordinates = attacks.get(0);
+                int x = coordinates.get(0);
+                int y = coordinates.get(1);
+
+                attack(troop, x, y);
+                return;
+            }
+            ArrayList<Integer> coordinates = moves.get(0);
+            int x = coordinates.get(0);
+            int y = coordinates.get(1);
+
+            move(troop, x, y);
+            return;
+
+        }
+        System.out.println("DNASLKDAS");
     }
 
     private void inGameButtonConfiguration() {
@@ -294,9 +298,8 @@ public class InGameController implements Initializable {
             bt_target.getStyleClass().setAll("piece", pieceTeam);
     }
 
-    private boolean move(int x, int y) {
-        selectedPiece.move(gameBoard, x, y);
-
+    private boolean move(Troop troop, int x, int y) {
+        troop.move(gameBoard, x, y);
         return true;
     }
 
@@ -304,8 +307,8 @@ public class InGameController implements Initializable {
     private void insert(MouseEvent event) {
     }
 
-    private boolean attack(int x, int y) {
-        Troop.AttackResult battleResult = selectedPiece.attack(gameBoard, x, y);
+    private boolean attack(Troop troop, int x, int y) {
+        Troop.AttackResult battleResult = troop.attack(gameBoard, x, y);
 
         if (battleResult == Troop.AttackResult.LOST) {
             gameBoard.getAt(x, y).setVisibility(true);
@@ -400,11 +403,6 @@ public class InGameController implements Initializable {
             mi.get(k).setId("mi_" + k);
             mi.get(k).getStyleClass().setAll("popup");
             mi.get(k).setOnAction(eh -> {
-                System.out.print("Núemro de pecas individuais posicionadas");
-                for (int i: positionedPieces){
-                    System.out.print(" " + i);
-                }
-                System.out.println();
                 Button bt_clicked = (Button) getFocusedNode("inGame");
 
                 MenuItem mi_source = (MenuItem) eh.getSource();
@@ -428,7 +426,7 @@ public class InGameController implements Initializable {
     }
 
     private boolean isFull() {
-        return 2 * getAbsoluteQuantity(positionedPieces) == getAbsoluteQuantity(individualQuantities);
+        return 2 * getTotalQuantityOfPieces(positionedPieces) == getTotalQuantityOfPieces(individualQuantities);
     }
 
     private boolean insertPiece(Button bt_target, String pieceName, String team) {
@@ -453,7 +451,7 @@ public class InGameController implements Initializable {
 
             bt_target.setText(pieceName);
             bt_target.getStyleClass().setAll("piece", className, team);
-            
+
             return true;
         }
         return false;
@@ -462,15 +460,7 @@ public class InGameController implements Initializable {
 
     private void initializeVariables() {
         gameBoard = new GameBoard();
-
-        createNameMap();
-        createIndexMap();
-
-        IntStream sizes = IntStream.of(6, 2, 4, 2, 2, 4);
-        individualQuantities = fillVector(individualQuantities, sizes);
-
-        IntStream init = IntStream.of(0, 0, 0, 0, 0, 0);
-        positionedPieces = fillVector(positionedPieces, init);
+        positionedPieces = IntStream.of(0, 0, 0, 0, 0, 0).toArray();
 
         Random rand = new Random();
         gameBoard.setLakeRow(2);
@@ -512,37 +502,8 @@ public class InGameController implements Initializable {
         }
     }
 
-    private int[] fillVector(int[] v, IntStream values) {
-        v = values.toArray();
-
-        return v;
-    }
-
-    private int getAbsoluteQuantity(int[] v) {
-        int sum = 0;
-
-        for (int n : v)
-            sum += n;
-
-        return sum;
-    }
-
-    private void createIndexMap() {
-        indexMap.put(0, "Soldado");
-        indexMap.put(1, "Espião");
-        indexMap.put(2, "Cabo Armeiro");
-        indexMap.put(3, "Marechal");
-        indexMap.put(4, "Bandeira");
-        indexMap.put(5, "Bomba");
-    }
-
-    private void createNameMap() {
-        nameMap.put("Soldado", "soldier");
-        nameMap.put("Espião", "spy");
-        nameMap.put("Cabo Armeiro", "gunsmith");
-        nameMap.put("Marechal", "marshal");
-        nameMap.put("Bandeira", "flag");
-        nameMap.put("Bomba", "bomb");
+    private int getTotalQuantityOfPieces(int[] v) {
+        return IntStream.of(v).sum();
     }
 
     private void giveHint(int col) {
@@ -611,8 +572,11 @@ public class InGameController implements Initializable {
             }
         }
 
-        IntStream init = IntStream.of(0, 0, 0, 0, 0, 0);
-        positionedPieces = fillVector(positionedPieces, init);
+        positionedPieces = IntStream.of(0, 0, 0, 0, 0, 0).toArray();
+    }
+
+    private enum GamePlayState {
+        POSITIONING_PIECES, IN_GAME, DEBUG
     }
 
 }

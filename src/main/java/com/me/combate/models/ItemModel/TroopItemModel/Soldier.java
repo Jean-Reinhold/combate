@@ -61,7 +61,7 @@ public class Soldier extends Troop {
     }
 
     @Override
-    protected void validateMove(GameBoard gameBoard, int x, int y) {
+    public void validateMove(GameBoard gameBoard, int x, int y) {
         if (x < 0) {
             throw new ItemOutOfBounds("New x cannot be negative");
         }

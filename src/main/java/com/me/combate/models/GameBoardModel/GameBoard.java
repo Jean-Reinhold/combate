@@ -1,10 +1,12 @@
 package com.me.combate.models.GameBoardModel;
 
+import com.me.combate.exceptions.IllegalMovement;
 import com.me.combate.exceptions.ItemOutOfBounds;
 import com.me.combate.models.ItemModel.Item;
+import com.me.combate.models.ItemModel.TroopItemModel.Troop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 
 public class GameBoard {
@@ -36,7 +38,7 @@ public class GameBoard {
         }
     }
 
-    public void insertItem(Item item, int x, int y) throws ItemOutOfBounds{
+    public void insertItem(Item item, int x, int y) throws ItemOutOfBounds {
         if (x >= this.getGameBoardSize()) {
             throw new ItemOutOfBounds("Cannot position item on x = " + x);
         }
@@ -129,5 +131,63 @@ public class GameBoard {
         }
     }
 
-    // public List<List<Integer>> getMachinePossibleAttacks
+    public ArrayList<Troop> getMachineTroops() {
+        ArrayList<Troop> machineTroops = new ArrayList<Troop>();
+        for (Item[] row : board) {
+            for (Item item : row) {
+                if (item instanceof Troop && item.getTeam().equals("machine")) {
+                    machineTroops.add((Troop) item);
+                }
+            }
+        }
+
+        return machineTroops;
+    }
+
+    public ArrayList<ArrayList<Integer>> getTroopPossibleAttacks(Troop troop) {
+        ArrayList<ArrayList<Integer>> attacks = new ArrayList<ArrayList<Integer>>();
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0)
+                    continue;
+                try {
+                    troop.validateAttack(this, troop.getX() - i, troop.getY() - j);
+
+                    ArrayList<Integer> coordinates = new ArrayList<Integer>();
+                    coordinates.add(troop.getX() - i);
+                    coordinates.add(troop.getY() - j);
+                    attacks.add(coordinates);
+                } catch (ItemOutOfBounds | IllegalMovement e) {
+                    continue;
+                }
+            }
+        }
+
+        return attacks;
+    }
+
+    public ArrayList<ArrayList<Integer>> getTroopPossibleMoves(Troop troop) {
+        ArrayList<ArrayList<Integer>> moves = new ArrayList<ArrayList<Integer>>();
+
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                if (i == 0 && j == 0)
+                    continue;
+                try {
+                    troop.validateMove(this, troop.getX() - i, troop.getY() - j);
+
+                    ArrayList<Integer> coordinates = new ArrayList<Integer>();
+                    coordinates.add(troop.getX() - i);
+                    coordinates.add(troop.getY() - j);
+                    moves.add(coordinates);
+                } catch (ItemOutOfBounds | IllegalMovement e) {
+                    continue;
+                }
+            }
+        }
+
+        return moves;
+    }
+
 }
