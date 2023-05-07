@@ -8,7 +8,7 @@
     -fx-border-width: 2px;
     -fx-border-style: none;
     -fx-box-sizing: border-box;
-    -fx-background-color: rgb(83, 173, 76);
+    -fx-background-color:  rgb(102,255,102);
     -fx-border-color: rgb(71, 125, 67);
 }
 
@@ -28,7 +28,7 @@
     -fx-max-height: 25px;
     -fx-min-width: 100px;
     -fx-min-height: 25px;
-    -fx-background-color: rgb(83, 173, 76);
+    -fx-background-color: rgb(102,255,102);
     -fx-text-fill: rgb(255, 255, 255);
     -fx-border-width: 4px;
     -fx-box-sizing: border-box;
@@ -39,7 +39,7 @@
 }
 
 .context_menu {
-    -fx-background-color: rgb(83, 173, 76);
+    -fx-background-color:  rgb(102,255,102);
 }
 
 .piece {
@@ -57,7 +57,7 @@
 
 .user {
     -fx-border-color: rgb(13, 87, 5);
-    -fx-background-color: rgb(43, 117, 35);
+    -fx-background-color: rgb(102,255,102);
 }
 
 .user:hover {
@@ -70,7 +70,7 @@
 }
 
 .machine {
-    -fx-background-color: rgb(120, 120, 120);
+    -fx-background-color: rgb(255,102,102);
     -fx-border-color: rgb(70, 70, 70);
 }
 

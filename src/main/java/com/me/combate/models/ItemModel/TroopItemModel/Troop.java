@@ -4,6 +4,7 @@ import com.me.combate.exceptions.IllegalMovement;
 import com.me.combate.exceptions.ItemOutOfBounds;
 import com.me.combate.models.GameBoardModel.GameBoard;
 import com.me.combate.models.ItemModel.Item;
+import com.me.combate.models.ItemModel.StaticItems.Lake;
 
 public class Troop extends Item {
     protected int level;
@@ -71,7 +72,7 @@ public class Troop extends Item {
         if (Math.abs(y - getY()) > 1 || Math.abs(x - getX()) > 1) {
             throw new IllegalMovement("Cannot attack to a target that is not adjacent");
         }
-        if (gameBoard.getAt(x, y) == null) {
+        if (gameBoard.getAt(x, y) == null || gameBoard.getAt(x, y) instanceof Lake) {
             throw new IllegalMovement("Cannot attack an empty position");
         }
         if (gameBoard.getAt(x, y).getTeam().equals(this.getTeam())) {

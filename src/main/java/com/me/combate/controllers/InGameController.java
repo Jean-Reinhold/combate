@@ -49,6 +49,30 @@ public class InGameController implements Initializable {
     public static void setGameMode(boolean state) {
         gameMode = state;
     }
+    @FXML
+    private Label lb_user_soldier;
+    @FXML
+    private Label lb_user_gunsmith;
+    @FXML
+    private Label lb_user_spy;
+    @FXML
+    private Label lb_user_marshal;
+    @FXML
+    private Label lb_user_flag;
+    @FXML
+    private Label lb_user_bomb;
+    @FXML
+    private Label lb_machine_soldier;
+    @FXML
+    private Label lb_machine_gunsmith;
+    @FXML
+    private Label lb_machine_spy;
+    @FXML
+    private Label lb_machine_marshal;
+    @FXML
+    private Label lb_machine_flag;
+    @FXML
+    private Label lb_machine_bomb;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -192,7 +216,10 @@ public class InGameController implements Initializable {
                 ArrayList<Integer> coordinates = attacks.get(0);
                 int x = coordinates.get(0);
                 int y = coordinates.get(1);
-
+                
+//                String id = "#bt_"+x+""+""+y;
+//                Button bt_selected = (Button) getNode(id,"inGame");
+                
                 attack(troop, x, y);
                 return;
             }
@@ -201,6 +228,10 @@ public class InGameController implements Initializable {
                 int x = coordinates.get(0);
                 int y = coordinates.get(1);
 
+//                String id = "#bt_"+x+""+""+y;
+//                Button bt_selected = (Button) getNode(id,"inGame");
+//                bt_selected.getStyleClass().setAll("piece");
+                
                 move(troop, x, y);
                 return;
             }
@@ -266,8 +297,7 @@ public class InGameController implements Initializable {
             showPieces(0, GameSettings.MACHINE_MAX_Y, false);
 
         gameBoard.setWhoIsPlaying("user");
-        bt_begin.setVisible(false);
-        bt_debug.setDisable(true);
+        bt_begin.setDisable(true);
         state = GamePlayState.IN_GAME;
     }
 
