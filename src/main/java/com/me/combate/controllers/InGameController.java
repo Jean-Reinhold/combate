@@ -154,23 +154,27 @@ public class InGameController implements Initializable {
                 }
                 wasSuccessful = attack(selectedPiece, row, col);
             }
-
+            render();
         }
 
         if (wasSuccessful) {
             selectedPiece = null;
+            render();
 
             checkWhoWon();
             gameBoard.setWhoIsPlaying("machine");
             machineTurn();
+            render();
 
             checkWhoWon();
             gameBoard.setWhoIsPlaying("user");
-
-            refreshGrid();
-            refreshLabels("user");
-            refreshLabels("machine");
         }
+    }
+
+    private void render(){
+        refreshGrid();
+        refreshLabels("user");
+        refreshLabels("machine");
     }
 
     private void machineTurn() {
