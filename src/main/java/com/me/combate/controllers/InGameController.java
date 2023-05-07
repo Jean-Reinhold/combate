@@ -453,6 +453,8 @@ public class InGameController implements Initializable {
 
             bt_target.setText(pieceName);
             bt_target.getStyleClass().setAll("piece", className, team);
+            
+            return true;
         }
         return false;
 
