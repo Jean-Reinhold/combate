@@ -1,86 +1,208 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import java.net.URL?>
-<AnchorPane xmlns:fx="http://javafx.com/fxml/1" id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-            minWidth="-Infinity" prefHeight="534.0" prefWidth="736.0" styleClass="mainFxmlClass"
-            xmlns="http://javafx.com/javafx/20" fx:controller="com.me.combate.controllers.InGameController">
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="900.0" styleClass="mainFxmlClass" xmlns="http://javafx.com/javafx/20" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.me.combate.controllers.InGameController">
     <stylesheets>
-        <URL value="@/styles/ingame.css"/>
+        <URL value="@/styles/ingame.css" />
     </stylesheets>
     <children>
-        <VBox layoutX="10.0" layoutY="67.0" prefHeight="323.0" prefWidth="580.0" AnchorPane.bottomAnchor="10.0"
-              AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" AnchorPane.topAnchor="67.0">
+        <VBox fillWidth="false" layoutX="-1.0" layoutY="-2.0" maxWidth="900.0" minWidth="665.0" prefHeight="720.0" prefWidth="900.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <children>
-                <Pane prefHeight="410.0" prefWidth="671.0">
+                <Pane maxHeight="721.0" maxWidth="900.0" minWidth="900.0" prefHeight="721.0" prefWidth="900.0" style="-fx-background-color: rgb(230,230,230);" stylesheets="@../styles/ingame.css">
                     <children>
-                        <GridPane fx:id="gd_table" gridLinesVisible="true" onMouseClicked="#insert" prefHeight="410.0"
-                                  prefWidth="535.0">
+                        <GridPane fx:id="gd_table" alignment="CENTER" layoutX="195.0" layoutY="51.0" prefHeight="510.0" prefWidth="510.0">
                             <columnConstraints>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-                                <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="60.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
+                                <ColumnConstraints hgrow="SOMETIMES" maxWidth="-Infinity" minWidth="10.0" prefWidth="100.0" />
                             </columnConstraints>
                             <rowConstraints>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
-                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
+                                <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                         </GridPane>
-                        <Label layoutX="578.0" layoutY="6.0" text="Posicione suas peças"/>
-                        <VBox alignment="TOP_CENTER" layoutX="578.0" layoutY="34.0" prefHeight="376.0"
-                              prefWidth="137.0">
+                        <VBox alignment="TOP_CENTER" prefHeight="602.0" prefWidth="181.0" style="-fx-background-color: rgb(102,255,102);" stylesheets="@../styles/ingame.css">
                             <children>
-                                <Button fx:id="bt_flag" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="138.0" text="Bandeira" wrapText="true"/>
-                                <Button fx:id="bt_bomb1" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="139.0" text="Bomba"/>
-                                <Button fx:id="bt_bomb2" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="156.0" text="Bomba"/>
-                                <Button fx:id="bt_spy" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="157.0" text="Espião"/>
-                                <Button fx:id="bt_soldier1" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="143.0" text="Soldado"/>
-                                <Button fx:id="bt_soldier2" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="136.0" text="Soldado"/>
-                                <Button fx:id="bt_soldier3" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="184.0" text="Soldado"/>
-                                <Button fx:id="bt_gunsmith1" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="177.0" text="Cabo Armeiro"/>
-                                <Button fx:id="bt_gunsmith2" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="178.0" text="Cabo Armeiro"/>
-                                <Button fx:id="bt_marshal" mnemonicParsing="false" onAction="#selectButton"
-                                        prefHeight="24.0" prefWidth="190.0" text="Marechal"/>
-                                <Button fx:id="bt_begin" alignment="CENTER" disable="true" mnemonicParsing="false"
-                                        onAction="#startGame" prefHeight="24.0" prefWidth="133.0" text="Iniciar Jogo">
+                                <Label text="Jogador">
+                                    <font>
+                                        <Font name="DejaVu Sans Bold" size="30.0" />
+                                    </font>
+                           <VBox.margin>
+                              <Insets top="25.0" />
+                           </VBox.margin>
+                                </Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/soldier.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_user_soldier" text="3x Soldado(s)">
                                     <VBox.margin>
-                                        <Insets left="20.0" right="20.0" top="20.0"/>
+                                        <Insets />
                                     </VBox.margin>
-                                </Button>
-                                <Button fx:id="bt_debug" alignment="CENTER" contentDisplay="CENTER"
-                                        mnemonicParsing="false" onAction="#showDebugView" prefHeight="24.0"
-                                        prefWidth="128.0" text="Debug">
-                                    <VBox.margin>
-                                        <Insets left="20.0" right="20.0" top="10.0"/>
-                                    </VBox.margin>
-                                </Button>
-                                <Button fx:id="bt_back" alignment="CENTER" mnemonicParsing="false" onAction="#goToMenu"
-                                        prefHeight="24.0" prefWidth="104.0" text="Voltar">
-                                    <VBox.margin>
-                                        <Insets left="20.0" right="20.0" top="10.0"/>
-                                    </VBox.margin>
-                                </Button>
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font>
+                                </Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/gunsmith.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_user_gunsmith" text="2x Cabo(s) Armeiro">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/spy.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_user_spy" text="1x Espião">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/marshal.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_user_marshal" text="1x Marechal">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/flag.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_user_flag" text="1x Bandeira">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/bomb.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_user_bomb" text="2x Bomba(s)">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                             </children>
                         </VBox>
+                        <VBox alignment="TOP_CENTER" layoutX="719.0" prefHeight="602.0" prefWidth="181.0" style="-fx-background-color: rgb(255,102,102);" stylesheets="@../styles/ingame.css">
+                            <children>
+                                <Label text="Máquina">
+                                    <font>
+                                        <Font name="DejaVu Sans Bold" size="31.0" />
+                                    </font>
+                           <VBox.margin>
+                              <Insets top="25.0" />
+                           </VBox.margin>
+                                </Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/soldier.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_machine_soldier" text="3x Soldado(s)">
+                                    <VBox.margin>
+                                        <Insets />
+                                    </VBox.margin>
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font>
+                                </Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/gunsmith.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_machine_gunsmith" text="2x Cabo(s) Armeiro">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/spy.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_machine_spy" text="1x Espião">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/marshal.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_machine_marshal" text="1x Marechal">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/flag.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_machine_flag" text="1x Bandeira">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                                <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
+                                    <image>
+                                        <Image url="@../../../styles/images/bomb.png" />
+                                    </image>
+                                </ImageView>
+                                <Label fx:id="lb_machine_bomb" text="2x Bomba(s)">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
+                            </children>
+                        </VBox>
+                      <HBox alignment="CENTER" layoutY="627.0" maxWidth="900.0" minWidth="900.0" prefHeight="42.0" prefWidth="900.0">
+                          <children>
+                              <Button fx:id="bt_begin" alignment="CENTER" contentDisplay="CENTER" disable="true" mnemonicParsing="false" onAction="#startGame" prefHeight="24.0" prefWidth="104.0" text="Iniciar Jogo" textAlignment="CENTER">
+                                  <HBox.margin>
+                                      <Insets right="50.0" />
+                                  </HBox.margin>
+                              </Button>
+                              <Button fx:id="bt_debug" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#showDebugView" prefHeight="24.0" prefWidth="104.0" text="Debug" textAlignment="CENTER">
+                                  <HBox.margin>
+                                      <Insets right="50.0" />
+                                  </HBox.margin>
+                              </Button>
+                              <Button fx:id="bt_back" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#goToMenu" prefHeight="24.0" prefWidth="104.0" text="Voltar" />
+                          </children>
+                      </HBox>
+                  <Label fx:id="lb_hint" layoutX="346.0" layoutY="590.0" text="Dicas Utilizadas: 0">
+                     <font>
+                        <Font name="DejaVu Sans Bold" size="20.0" />
+                     </font>
+                  </Label>
                     </children>
                     <VBox.margin>
-                        <Insets top="25.0"/>
+                        <Insets />
                     </VBox.margin>
                 </Pane>
             </children>

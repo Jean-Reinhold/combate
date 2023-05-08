@@ -1,7 +1,126 @@
-/*
- * Empty Stylesheet file.
- */
+.bt {
+    -fx-alignment: CENTER;
+    -fx-max-width: 100px;
+    -fx-max-height: 40px;
+    -fx-min-width: 100px;
+    -fx-min-height: 40px;
+    -fx-text-fill: rgb(255,255,255);
+    -fx-border-width: 2px;
+    -fx-border-style: none;
+    -fx-box-sizing: border-box;
+    -fx-background-color: rgb(102,255,102);
+    -fx-border-color: rgb(72,125,72);
+}
 
-.mainFxmlClass {
+.bt:hover {
+    -fx-background-color: rgb(72,125,72);
+}
+
+.bt:disabled {
+    -fx-background-color: rgb(133,203,126);
+    -fx-border-color: rgb(121,175,117);
+}
+
+.popup {
+    -fx-text-fill: rgb(255,255,255);
+    -fx-padding: 10px;
+    -fx-max-width: 100px;
+    -fx-max-height: 25px;
+    -fx-min-width: 100px;
+    -fx-min-height: 25px;
+    -fx-background-color: rgb(102,255,102);
+    -fx-text-fill: rgb(255,255,255);
+    -fx-border-width: 4px;
+    -fx-box-sizing: border-box;
+}
+
+.popup:hover {
+    -fx-background-color: rgb(71,125,67);
+}
+
+.context_menu {
+    -fx-background-color: rgb(102,255,102);
+}
+
+.piece {
+    -fx-border-style: none;
+    -fx-border-width: 4px;
+    -fx-border-collapse: separate;
+    -fx-max-width: 100px;
+    -fx-max-height: 100px;
+    -fx-min-width: 100px;
+    -fx-min-height: 100px;
+    -fx-text-fill: transparent;
+    -fx-background-size: cover;
+    -fx-box-sizing: border-box;
+}
+
+.user {
+    -fx-border-color: rgb(52, 195, 42);
+    -fx-background-color: rgb(102,255,102);
+}
+
+.user:hover {
+    -fx-border-color: rgb(32,175,22);
+}
+
+.user:focused {
+    -fx-background-color: rgb(32,175,22);
+    -fx-border-color: rgb(32,175,22);
+}
+
+.machine {
+    -fx-background-color: rgb(255,102,102);
+    -fx-border-color: rgb(235, 82, 82);
+}
+
+.machine:hover {
+    -fx-border-color: rgb(215,62,62);
+}
+
+.machine:focused {
+    -fx-background-color: rgb(215,62,62);
+    -fx-border-color: rgb(215,62,62);
+}
+
+.neutral {
+    -fx-border-color: rgb(110,80,50);
+}
+
+.neutral:hover {
+    -fx-border-color: rgb(130,100,70);
+}
+
+.ground {
+    -fx-background-color: rgb(161, 128, 77);
+}
+
+.lake {
+    -fx-background-color: rgb(86, 152, 219);
+    -fx-border-color: rgb(66,132,199);
+}
+
+.soldier {
+    -fx-background-image: url('./images/soldier.png');
+}
+
+.bomb {
+    -fx-background-image: url('./images/bomb.png');
+}
+
+.spy {
+    -fx-background-image: url('./images/spy.png');    
+}
+
+.marshal {
+    -fx-background-image: url('./images/marshal.png');    
+}
+
+.gunsmith {
+    -fx-background-image: url('./images/gunsmith.png');
+}
+
+.flag {
+    -fx-background-image: url('./images/flag.png');
 
 }

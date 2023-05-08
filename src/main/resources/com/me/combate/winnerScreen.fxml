@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" styleClass="mainFxmlClass" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/20" fx:controller="com.me.combate.controllers.WinnerScreenController">
+    <stylesheets>
+        <URL value="@/styles/winnerscreen.css" />
+    </stylesheets>
+   <children>
+      <Label fx:id="lb_winner" layoutX="124.0" layoutY="47.0" text="VOCÊ VENCEU!!!">
+         <font>
+            <Font name="DejaVu Sans Bold" size="38.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="img_winner" fitHeight="200.0" fitWidth="200.0" layoutX="201.0" layoutY="108.0" pickOnBounds="true" preserveRatio="true" />
+      <Button fx:id="bt_back" layoutX="194.0" layoutY="329.0" mnemonicParsing="false" onAction="#goToMenu" prefHeight="24.0" prefWidth="214.0" text="Voltar para o menu principal" />
+   </children>
+</AnchorPane>

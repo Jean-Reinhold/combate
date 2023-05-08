@@ -4,41 +4,43 @@
  */
 package com.me.combate.controllers;
 
-import com.me.combate.Main;
-import com.me.combate.essentials.SceneManager;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import com.me.combate.Main;
+import com.me.combate.essentials.SceneManager;
 /**
  * FXML Controller class
  *
  * @author rafaelboeira
  */
-public class AboutController implements Initializable {
+public class FinalSceneController implements Initializable {
 
     @FXML
-    private Button bt_back;
+    private Label lb_winner;
+    @FXML
+    private Button bt_winner;
+    @FXML
+    private Button bt_image;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        bt_back.getStyleClass().setAll("bt_menu");
-    }
+    
+    }    
 
     @FXML
-    private void goToMenu(ActionEvent event) throws IOException {
+    private void goToMenu(ActionEvent event) {
         SceneManager sm = Main.getSceneManager();
-
+        
         sm.setScene("menu");
     }
-
+    
 }

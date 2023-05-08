@@ -4,10 +4,18 @@ public class Item {
     private int x = -1;
     private int y = -1;
     private String team = "user";
-    private String pathToIcon;
+    private boolean visibility = true;
 
     public Item(String team) {
         this.team = team;
+    }
+
+    public boolean getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(boolean visibility) {
+        this.visibility = visibility;
     }
 
     public String getTeam() {
@@ -16,14 +24,6 @@ public class Item {
 
     protected void setTeam(String team) {
         this.team = team;
-    }
-
-    public String getPathToIcon() {
-        return pathToIcon;
-    }
-
-    protected void setPathToIcon(String pathToIcon) {
-        this.pathToIcon = pathToIcon;
     }
 
     public int getX() {
@@ -40,5 +40,12 @@ public class Item {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public String getSubClass() {
+        String className = this.getClass().getName();
+        int startSubClassIndex = className.lastIndexOf('.') + 1;
+
+        return className.substring(startSubClassIndex).toLowerCase();
     }
 }

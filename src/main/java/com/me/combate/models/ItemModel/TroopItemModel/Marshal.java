@@ -5,26 +5,26 @@ import com.me.combate.models.ItemModel.Item;
 import com.me.combate.models.ItemModel.StaticItems.Bomb;
 import com.me.combate.models.ItemModel.StaticItems.Flag;
 
-public class Gunsmith extends Troop {
+public class Marshal extends Troop {
 
-    public Gunsmith(String team) {
+    public Marshal(String team) {
         super(team);
-        this.setLevel(3);
+        this.setLevel(10);
     }
 
     public AttackResult attack(GameBoard gameBoard, int x, int y) {
         validateAttack(gameBoard, x, y);
 
         Item piece = gameBoard.getAt(x, y);
+
         if (gameBoard.getAt(x, y) instanceof Bomb) {
             gameBoard.removeAt(this, getX(), getY());
-            gameBoard.insertItem(this, x, y);
-            return AttackResult.WON;
+            return AttackResult.LOST;
         }
         if (gameBoard.getAt(x, y) instanceof Flag) {
             return AttackResult.FINISHED_GAME;
         }
-        if (gameBoard.getAt(x, y) instanceof Gunsmith) {
+        if (gameBoard.getAt(x, y) instanceof Marshal) {
             gameBoard.removeAt(piece, x, y);
             gameBoard.removeAt(this, getX(), getY());
 

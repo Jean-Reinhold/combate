@@ -4,15 +4,19 @@ import com.me.combate.exceptions.IllegalMovement;
 import com.me.combate.exceptions.ItemOutOfBounds;
 import com.me.combate.models.GameBoardModel.GameBoard;
 import com.me.combate.models.ItemModel.Item;
+import com.me.combate.models.ItemModel.StaticItems.Lake;
 
 public class Troop extends Item {
-    private int level;
+    protected int level;
     private int x, y;
 
     public Troop(String team) {
         super(team);
     }
 
+    public AttackResult attack(GameBoard gameBoard, int x, int y) {
+        return AttackResult.DRAW;
+    }
 
     public void move(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         validateMove(gameBoard, x, y);
@@ -24,14 +28,11 @@ public class Troop extends Item {
         gameBoard.setAt(x, y, this);
         gameBoard.setAt(originalX, originalY, targetItem);
 
-        targetItem.setX(originalX);
-        targetItem.setY(originalY);
-
         setX(x);
         setY(y);
     }
 
-    protected void validateMove(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
+    public void validateMove(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         if (x < 0) {
             throw new ItemOutOfBounds("New x cannot be negative");
         }
@@ -55,7 +56,7 @@ public class Troop extends Item {
         }
     }
 
-    protected void validateAttack(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
+    public void validateAttack(GameBoard gameBoard, int x, int y) throws ItemOutOfBounds, IllegalMovement {
         if (x < 0) {
             throw new ItemOutOfBounds("Target x cannot be negative");
         }
@@ -71,12 +72,23 @@ public class Troop extends Item {
         if (Math.abs(y - getY()) > 1 || Math.abs(x - getX()) > 1) {
             throw new IllegalMovement("Cannot attack to a target that is not adjacent");
         }
-        if (gameBoard.getAt(x, y) == null) {
+        if (gameBoard.getAt(x, y) == null || gameBoard.getAt(x, y) instanceof Lake) {
             throw new IllegalMovement("Cannot attack an empty position");
+        }
+        if (gameBoard.getAt(x, y).getTeam().equals(this.getTeam())) {
+            throw new IllegalMovement("Cannot attack the same team");
         }
     }
 
     public int getLevel() {
         return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public enum AttackResult {
+        LOST, WON, DRAW, FINISHED_GAME
     }
 }

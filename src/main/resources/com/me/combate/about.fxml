@@ -20,7 +20,7 @@
         <Label layoutX="138.0" layoutY="73.0" prefHeight="125.0" prefWidth="325.0"
                text="Este jogo foi desenvolvido por Rafael Mews Boeira e Jean Paul Nunes Reinhold, alunos na Universidade Federal de Pelotas, para a cadeira de Programação Orientada a Objetos com o prof. Ulisses"
                textAlignment="JUSTIFY" wrapText="true"/>
-        <Button fx:id="bt_back" layoutX="272.0" layoutY="210.0" mnemonicParsing="false" onAction="#goToMenu"
-                text="Voltar"/>
+        <Button fx:id="bt_back" alignment="CENTER" contentDisplay="CENTER" layoutX="272.0" layoutY="200.0"
+                mnemonicParsing="false" onAction="#goToMenu" text="Voltar" textAlignment="CENTER"/>
     </children>
 </AnchorPane>

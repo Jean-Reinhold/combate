@@ -1,6 +1,6 @@
 .bt_menu {
     -fx-alignment: CENTER;
-    -fx-max-width: 100px;
+    -fx-max-width: 200px;
     -fx-max-height: 40px;
     -fx-min-width: 100px;
     -fx-min-height: 40px;
@@ -14,4 +14,20 @@
 
 .bt_menu:hover {
     -fx-background-color: rgb(72,125,72);
+}
+
+.bt_image{
+    -fx-background-size: stretch;
+}
+
+.user{
+    -fx-background-image: url('./images/winGame.png');
+}
+
+.machine{
+    -fx-background-image: url('./images/lostGame.png');
+}
+
+.draw{
+    -fx-background-image: url('./images/lostGame.png');
 }

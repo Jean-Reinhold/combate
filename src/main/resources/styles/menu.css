@@ -1,7 +1,17 @@
-/*
- * Empty Stylesheet file.
- */
+.bt_menu {
+    -fx-alignment: CENTER;
+    -fx-max-width: 100px;
+    -fx-max-height: 40px;
+    -fx-min-width: 100px;
+    -fx-min-height: 40px;
+    -fx-text-fill: rgb(255,255,255);
+    -fx-border-width: 2px;
+    -fx-border-style: none;
+    -fx-box-sizing: border-box;
+    -fx-background-color: rgb(102,255,102);
+    -fx-border-color: rgb(72,125,72);
+}
 
-.mainFxmlClass {
-
+.bt_menu:hover {
+    -fx-background-color: rgb(72,125,72);
 }
