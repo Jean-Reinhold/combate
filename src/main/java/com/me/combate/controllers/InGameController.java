@@ -202,12 +202,18 @@ public class InGameController implements Initializable {
         selectedPiece = null;
         render();
 
-        checkForDraw();
-        checkForOnlyMachinePieces();
+        if (checkForDraw())
+            return;
+        if (checkForOnlyMachinePieces())
+            return;
         gameBoard.setWhoIsPlaying("machine");
         machineTurn();
 
         render();
+        if (checkForDraw())
+            return;
+        if (checkForOnlyMachinePieces())
+            return;
         gameBoard.setWhoIsPlaying("user");
     }
 
@@ -386,14 +392,20 @@ public class InGameController implements Initializable {
         return false;
     }
 
-    private void checkForOnlyMachinePieces() {
-        if (!isThereATroop())
+    private boolean checkForOnlyMachinePieces() {
+        if (!isThereAUserTroop()){
+            System.out.println("Deu machine");
             goToWinScreen("machine");
+        }
+        return !isThereAUserTroop();
     }
 
-    private void checkForDraw() {
-        if (!isThereATroop())
+    private boolean checkForDraw() {
+        if (!isThereATroop()){
+            System.out.println("Deu Draw");
             goToWinScreen("draw");
+        }
+        return !isThereATroop();
     }
 
     @FXML
