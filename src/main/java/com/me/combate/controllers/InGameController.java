@@ -22,6 +22,7 @@ import javafx.scene.layout.GridPane;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.CountDownLatch;
 import java.util.stream.IntStream;
 
 public class InGameController implements Initializable {
@@ -32,6 +33,7 @@ public class InGameController implements Initializable {
           IA do computador
     */
     private static boolean gameMode = true;
+    private final Object lock = new Object();
     private final Map<Integer, String> indexMap = Map.of(0, "Soldado", 1, "Espião", 2, "Cabo Armeiro", 3, "Marechal", 4, "Bandeira", 5, "Bomba");
     private final Map<String, String> nameMap = Map.of("Soldado", "soldier", "Espião", "spy", "Cabo Armeiro", "gunsmith", "Marechal", "marshal", "Bandeira", "flag", "Bomba", "bomb");
     private final int[] individualQuantities = IntStream.of(6, 2, 4, 2, 2, 4).toArray();
@@ -78,6 +80,10 @@ public class InGameController implements Initializable {
     }
     @FXML
     private Label lb_hint;
+
+    public Object getLock() {
+        return lock;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -195,11 +201,11 @@ public class InGameController implements Initializable {
         render();
 
         checkForDraw();
+        checkForOnlyMachinePieces();
         gameBoard.setWhoIsPlaying("machine");
         machineTurn();
-        render();
 
-        checkForDraw();
+        render();
         gameBoard.setWhoIsPlaying("user");
     }
 
@@ -298,6 +304,7 @@ public class InGameController implements Initializable {
         gameBoard.setWhoIsPlaying("user");
         bt_begin.setDisable(true);
         state = GamePlayState.IN_GAME;
+        goToWinScreen("machine");
     }
 
     @FXML
@@ -346,10 +353,8 @@ public class InGameController implements Initializable {
 
     private void goToWinScreen(String team) {
         SceneManager sm = Main.getSceneManager();
-        
         WinnerScreenController.setWinner(team);
         sm.setScene("winnerScreen");
-        
     }
 
     private boolean isThereATroop() {
@@ -359,6 +364,20 @@ public class InGameController implements Initializable {
                     return true;
         }
         return false;
+    }
+
+    private boolean isThereAUserTroop() {
+        for (int i = 0; i < gameBoard.getGameBoardSize(); i++) {
+            for (int j = 0; j < gameBoard.getGameBoardSize(); j++)
+                if (gameBoard.getAt(i, j) instanceof Troop && gameBoard.getAt(i, j).getTeam().equals("user"))
+                    return true;
+        }
+        return false;
+    }
+
+    private void checkForOnlyMachinePieces() {
+        if (!isThereATroop())
+            goToWinScreen("machine");
     }
 
     private void checkForDraw() {

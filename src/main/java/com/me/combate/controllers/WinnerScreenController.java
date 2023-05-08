@@ -6,6 +6,9 @@ package com.me.combate.controllers;
 
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import com.me.combate.essentials.SceneManager;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -20,44 +23,48 @@ import com.me.combate.Main;
  * @author rafaelboeira
  */
 public class WinnerScreenController implements Initializable {
+
     private static String winner = "user";
+
     @FXML
-    private Label lb_winner;
+    private static Label lb_winner = new Label();
+
     @FXML
     private ImageView img_winner;
+
     @FXML
     private Button bt_back;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        if (winner.equals("user"))
-            lb_winner.setText("VOCÊ VENCEU!!!");
-        if (winner.equals("machine"))
-            lb_winner.setText("VOCÊ PERDEU...");
-        if (winner.equals("draw"))
-            lb_winner.setText("EMPATE...");
-            
-        img_winner.getStyleClass().setAll(winner);
-        bt_back.getStyleClass().setAll("bt");
-    }    
-    
-    public static void setWinner(String result){
-        System.out.println(result);
+        updateWinnerLabel();
+    }
+
+    public static void setWinner(String result) {
         winner = result;
+        Platform.runLater(() -> updateWinnerLabel());
+    }
+
+    private static void updateWinnerLabel() {
+        if (winner.equals("user")) {
+            lb_winner.setText("VOCÊ VENCEU!!!");
+        }
+        if (winner.equals("machine")) {
+            lb_winner.setText("VOCÊ PERDEU...");
+        }
+        if (winner.equals("draw")) {
+            lb_winner.setText("EMPATE...");
+        }
     }
 
     @FXML
     private void goToMenu(ActionEvent event) {
-        try{
+        try {
             Main.getSceneManager().resetScenes();
-        }catch(Exception e){
-            return;
+        } catch (Exception e) {
+            // Do nothing
         }
         Main.getSceneManager().setScene("menu");
     }
-    
+
 }
