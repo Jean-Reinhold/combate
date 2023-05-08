@@ -84,11 +84,12 @@ public class InGameController implements Initializable {
             initializeVariables();
             initializeGrid();
             createRandomPieces(0, 2, "machine");
+            for (Item piece: gameBoard.getMachineItems())
+                setVisibility(piece, false);
             if (!gameMode) {
                 createRandomPieces(3, 5, "user");
                 bt_begin.setDisable(false);
             }
-            showPieces(0, 2, false);
             refreshGrid();
         });
 
@@ -166,7 +167,7 @@ public class InGameController implements Initializable {
         }
 
         if (targetPiece == null)
-            wasSuccessful = move(selectedPiece, row, col);
+            wasSuccessful = applyMove(selectedPiece, row, col);
         else {
             if (targetPiece.getTeam().equals("user") && targetPiece instanceof Troop) {
                 selectedPiece = (Troop) targetPiece;
@@ -176,7 +177,7 @@ public class InGameController implements Initializable {
                 if (selectedPiece == null) {
                     return;
                 }
-                wasSuccessful = attack(selectedPiece, row, col);
+                wasSuccessful = applyAttack(selectedPiece, row, col);
             }
             render();
         }
@@ -204,6 +205,7 @@ public class InGameController implements Initializable {
     private void machineTurn() {
         Random random = new Random();
         ArrayList<Troop> machineTroops = gameBoard.getMachineTroops();
+        Collections.shuffle(machineTroops);
 
         for (Troop troop : machineTroops) {
             ArrayList<ArrayList<Integer>> attacks = gameBoard.getTroopPossibleAttacks(troop);
@@ -220,7 +222,7 @@ public class InGameController implements Initializable {
 //                String id = "#bt_"+x+""+""+y;
 //                Button bt_selected = (Button) getNode(id,"inGame");
                 
-                attack(troop, x, y);
+                applyAttack(troop, x, y);
                 return;
             }
             if (attacks.isEmpty()) {
@@ -232,7 +234,7 @@ public class InGameController implements Initializable {
 //                Button bt_selected = (Button) getNode(id,"inGame");
 //                bt_selected.getStyleClass().setAll("piece");
                 
-                move(troop, x, y);
+                applyMove(troop, x, y);
                 return;
             }
 
@@ -241,14 +243,14 @@ public class InGameController implements Initializable {
                 int x = coordinates.get(0);
                 int y = coordinates.get(1);
 
-                attack(troop, x, y);
+                applyAttack(troop, x, y);
                 return;
             }
             ArrayList<Integer> coordinates = moves.get(0);
             int x = coordinates.get(0);
             int y = coordinates.get(1);
 
-            move(troop, x, y);
+            applyMove(troop, x, y);
             return;
 
         }
@@ -293,9 +295,6 @@ public class InGameController implements Initializable {
     private void startGame(ActionEvent event) throws NullPointerException {
         inGameButtonConfiguration();
 
-        if (gameBoard.isDebugging())
-            showPieces(0, GameSettings.MACHINE_MAX_Y, false);
-
         gameBoard.setWhoIsPlaying("user");
         bt_begin.setDisable(true);
         state = GamePlayState.IN_GAME;
@@ -303,25 +302,14 @@ public class InGameController implements Initializable {
 
     @FXML
     private void showDebugView(ActionEvent event) {
-        showPieces(0, GameSettings.MACHINE_MAX_Y, !gameBoard.isDebugging());
+        for (Item piece: gameBoard.getMachineItems())
+            setVisibility(piece, !gameBoard.isDebugging());
         gameBoard.setIsDebugging(!gameBoard.isDebugging());
     }
-
-    private void showPieces(int start, int end, boolean visibility) {
-        for (int i = start; i < end; i++)
-            for (int j = 0; j < GameSettings.GRID_SIZE; j++)
-                toggleVisibleState(i, j, visibility);
-    }
-
-    private void toggleVisibleState(int row, int col, boolean visibility) {
-        Item piece = gameBoard.getAt(row, col);
-
-        if (piece == null)
-            return;
-
+    private void setVisibility(Item piece, boolean visibility) {
         String pieceTeam = piece.getTeam();
         String pieceName = piece.getSubClass();
-        String id = "#bt_" + row + col;
+        String id = "#bt_" + piece.getX() + piece.getY();
 
         Button bt_target = (Button) getNode(id, "inGame");
         piece.setVisibility(visibility);
@@ -332,7 +320,7 @@ public class InGameController implements Initializable {
             bt_target.getStyleClass().setAll("piece", pieceTeam);
     }
 
-    private boolean move(Troop troop, int x, int y) {
+    private boolean applyMove(Troop troop, int x, int y) {
         troop.move(gameBoard, x, y);
         return true;
     }
@@ -341,7 +329,7 @@ public class InGameController implements Initializable {
     private void insert(MouseEvent event) {
     }
 
-    private boolean attack(Troop troop, int x, int y) {
+    private boolean applyAttack(Troop troop, int x, int y) {
         Troop.AttackResult battleResult = troop.attack(gameBoard, x, y);
 
         if (battleResult == Troop.AttackResult.LOST) {

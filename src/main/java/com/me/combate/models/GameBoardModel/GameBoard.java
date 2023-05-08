@@ -131,6 +131,19 @@ public class GameBoard {
         }
     }
 
+    public ArrayList<Item> getMachineItems() {
+        ArrayList<Item> machineItems = new ArrayList<Item>();
+        for (Item[] row : board) {
+            for (Item item : row) {
+                if (item != null && item.getTeam().equals("machine")) {
+                    machineItems.add((Item) item);
+                }
+            }
+        }
+
+        return machineItems;
+    }
+
     public ArrayList<Troop> getMachineTroops() {
         ArrayList<Troop> machineTroops = new ArrayList<Troop>();
         for (Item[] row : board) {
