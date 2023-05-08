@@ -193,12 +193,12 @@ public class InGameController implements Initializable {
         selectedPiece = null;
         render();
 
-        checkWhoWon();
+        checkForDraw();
         gameBoard.setWhoIsPlaying("machine");
         machineTurn();
         render();
 
-        checkWhoWon();
+        checkForDraw();
         gameBoard.setWhoIsPlaying("user");
     }
 
@@ -225,9 +225,6 @@ public class InGameController implements Initializable {
                 int x = coordinates.get(0);
                 int y = coordinates.get(1);
 
-//                String id = "#bt_"+x+""+""+y;
-//                Button bt_selected = (Button) getNode(id,"inGame");
-
                 applyAttack(troop, x, y);
                 return;
             }
@@ -235,10 +232,6 @@ public class InGameController implements Initializable {
                 ArrayList<Integer> coordinates = moves.get(0);
                 int x = coordinates.get(0);
                 int y = coordinates.get(1);
-
-//                String id = "#bt_"+x+""+""+y;
-//                Button bt_selected = (Button) getNode(id,"inGame");
-//                bt_selected.getStyleClass().setAll("piece");
 
                 applyMove(troop, x, y);
                 return;
@@ -354,34 +347,18 @@ public class InGameController implements Initializable {
         SceneManager sm = Main.getSceneManager();
     }
 
-    private boolean isThereAnyPieces(String team) {
-        HashMap<String, Integer> countValues = gameBoard.itemCount(team);
-        int quantity;
-
-        for (String className : nameMap.values()) {
-            if (className.equals("flag"))
-                continue;
-
-            quantity = countValues.get(className);
-            if (quantity > 0) {
-                return true;
-            }
+    private boolean isThereATroop() {
+        for (int i = 0; i < gameBoard.getGameBoardSize(); i++) {
+            for (int j = 0; j < gameBoard.getGameBoardSize(); j++)
+                if (gameBoard.getAt(i, j) instanceof Troop)
+                    return true;
         }
         return false;
     }
 
-    private void checkWhoWon() {
-        boolean userState = isThereAnyPieces("user");
-        boolean machineState = isThereAnyPieces("machine");
-
-        if (!userState && !machineState)
+    private void checkForDraw() {
+        if (!isThereATroop())
             goToWinScreen("draw");
-
-        if (userState && !machineState)
-            goToWinScreen("user");
-
-        if (!userState && machineState)
-            goToWinScreen("machine");
     }
 
     @FXML
