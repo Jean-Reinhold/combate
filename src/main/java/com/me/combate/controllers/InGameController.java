@@ -1,7 +1,6 @@
 package com.me.combate.controllers;
 
 import com.me.combate.Main;
-import com.me.combate.controllers.WinnerScreenController;
 import com.me.combate.essentials.SceneManager;
 import com.me.combate.exceptions.IllegalMovement;
 import com.me.combate.exceptions.ItemOutOfBounds;
@@ -24,6 +23,9 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.IntStream;
+import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
 
 public class InGameController implements Initializable {
     /*------------------------Falta--------------------------
@@ -304,7 +306,6 @@ public class InGameController implements Initializable {
         gameBoard.setWhoIsPlaying("user");
         bt_begin.setDisable(true);
         state = GamePlayState.IN_GAME;
-        goToWinScreen("machine");
     }
 
     @FXML
@@ -336,9 +337,6 @@ public class InGameController implements Initializable {
         troop.move(gameBoard, x, y);
     }
 
-    @FXML
-    private void insert(MouseEvent event) {
-    }
 
     private void applyAttack(Troop troop, int x, int y) {
         Troop.AttackResult battleResult = troop.attack(gameBoard, x, y);
@@ -353,8 +351,21 @@ public class InGameController implements Initializable {
 
     private void goToWinScreen(String team) {
         SceneManager sm = Main.getSceneManager();
-        WinnerScreenController.setWinner(team);
-        sm.setScene("winnerScreen");
+        Label lb_win = (Label) getNode("#lb_winner","finalScene");
+        if (team.equals("user"))
+            lb_win.setText("VOCÊ VENCEU!!!");
+        if (team.equals("machine"))
+            lb_win.setText("VOCÊ PERDEU...");
+        if (team.equals("draw"))
+            lb_win.setText("EMPATE");
+        
+        Button bt_win = (Button) getNode("#bt_winner", "finalScene");
+        bt_win.getStyleClass().setAll("bt_menu");
+        
+        Button bt_img = (Button) getNode("#bt_image","finalScene");
+        bt_img.getStyleClass().setAll(team, "bt_image");
+        
+        sm.setScene("finalScene");
     }
 
     private boolean isThereATroop() {
