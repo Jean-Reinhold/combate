@@ -1,6 +1,7 @@
 package com.me.combate.controllers;
 
 import com.me.combate.Main;
+import com.me.combate.controllers.WinnerScreenController;
 import com.me.combate.essentials.SceneManager;
 import com.me.combate.exceptions.IllegalMovement;
 import com.me.combate.exceptions.ItemOutOfBounds;
@@ -339,12 +340,16 @@ public class InGameController implements Initializable {
         setVisibility(gameBoard.getAt(x, y), true);
 
         if (battleResult == Troop.AttackResult.FINISHED_GAME) {
-            goToWinScreen("user");
+            goToWinScreen(troop.getTeam());
         }
     }
 
     private void goToWinScreen(String team) {
         SceneManager sm = Main.getSceneManager();
+        
+        WinnerScreenController.setWinner(team);
+        sm.setScene("winnerScreen");
+        
     }
 
     private boolean isThereATroop() {

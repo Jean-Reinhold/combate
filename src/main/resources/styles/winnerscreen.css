@@ -1,0 +1,29 @@
+.user {
+    -fx-image: url('./images/winGame.png');
+}
+
+.machine {
+    -fx-image: url('./images/lostGame.png');
+}
+
+.draw {
+    -fx-image: url('./images/lostGame.png');
+}
+
+.bt {
+    -fx-alignment: CENTER;
+    -fx-max-width: 200px;
+    -fx-max-height: 40px;
+    -fx-min-width: 200px;
+    -fx-min-height: 40px;
+    -fx-text-fill: rgb(255,255,255);
+    -fx-border-width: 2px;
+    -fx-border-style: none;
+    -fx-box-sizing: border-box;
+    -fx-background-color: rgb(83,173,76);
+    -fx-border-color: rgb(71,125,67);
+}
+
+.bt:hover {
+    -fx-background-color: rgb(71,125,67);
+}
