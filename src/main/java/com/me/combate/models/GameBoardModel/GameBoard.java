@@ -136,7 +136,7 @@ public class GameBoard {
         for (Item[] row : board) {
             for (Item item : row) {
                 if (item != null && item.getTeam().equals("machine")) {
-                    machineItems.add((Item) item);
+                    machineItems.add(item);
                 }
             }
         }
