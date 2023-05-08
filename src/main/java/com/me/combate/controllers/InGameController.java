@@ -260,7 +260,6 @@ public class InGameController implements Initializable {
             return;
 
         }
-        System.out.println("DNASLKDAS");
     }
 
     private void inGameButtonConfiguration() {
@@ -276,6 +275,7 @@ public class InGameController implements Initializable {
             int col = GridPane.getColumnIndex(bt_clicked);
 
             giveHint(col);
+            render();
         });
 
         cm.getItems().add(mi_hint);
@@ -536,15 +536,17 @@ public class InGameController implements Initializable {
     }
 
     private void giveHint(int col) {
-        if (counterOfHints == GameSettings.HINT_MAX)
-            return;
-        
-        boolean hintFlag = false;
         Alert hintDialog = new Alert(Alert.AlertType.INFORMATION);
         hintDialog.setTitle("Dica");
         hintDialog.setHeaderText("");
 
-        counterOfHints++;
+        if (counterOfHints == GameSettings.HINT_MAX){
+            hintDialog.setContentText("Limite de dicas excedido!");
+            hintDialog.show();
+            return;
+        }
+        boolean hintFlag = false;
+        this.counterOfHints++;
         for (int i = 0; i < GameSettings.GRID_SIZE; i++) {
             Item unknownPiece = gameBoard.getAt(i, col);
 
