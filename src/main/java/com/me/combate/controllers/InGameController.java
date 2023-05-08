@@ -75,6 +75,8 @@ public class InGameController implements Initializable {
     public static void setGameMode(boolean state) {
         gameMode = state;
     }
+    @FXML
+    private Label lb_hint;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -536,6 +538,7 @@ public class InGameController implements Initializable {
     private void giveHint(int col) {
         if (counterOfHints == GameSettings.HINT_MAX)
             return;
+        
         boolean hintFlag = false;
         Alert hintDialog = new Alert(Alert.AlertType.INFORMATION);
         hintDialog.setTitle("Dica");
@@ -555,13 +558,16 @@ public class InGameController implements Initializable {
             }
         }
         if (hintFlag) {
-            hintDialog.setContentText("Bombas foram encontradas!");
+            hintDialog.setContentText("Bomba encontrada na coluna!");
             hintDialog.show();
             return;
         }
 
         hintDialog.setContentText("Nenhuma bomba encontrada!");
         hintDialog.show();
+        
+        String hintText = "Dicas Utilizadas: "+counterOfHints;
+        lb_hint.setText(hintText);
     }
 
     private void createRandomPieces(int start, int end, String team) {

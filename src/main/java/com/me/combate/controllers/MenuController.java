@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.scene.control.Alert;
 
 public class MenuController implements Initializable {
 
@@ -46,6 +47,12 @@ public class MenuController implements Initializable {
 
         sm.resetScenes();
         sm.setScene("inGame");
+        
+        Alert startDialog = new Alert(Alert.AlertType.INFORMATION);
+        startDialog.setTitle("Como Jogar");
+        startDialog.setHeaderText("Posicionando peças e recebendo dicas");
+        startDialog.setContentText("Para selecionar a peça desejada e posicioná-la corretamente, é necessário clicar com o botão direito nas peças presentes nas duas fileiras inferiores. Após posicionar todas as peças adequadamente, a opção de iniciar o jogo estará disponível para você.\n\n\nDurante o jogo, você terá direito a duas dicas. Uma das dicas informará se há bombas presentes na coluna selecionada. Para obter essa informação, basta clicar na coluna desejada.");
+        startDialog.show();
     }
 
     @FXML

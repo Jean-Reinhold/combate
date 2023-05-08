@@ -40,11 +40,11 @@
                                 <RowConstraints maxHeight="-Infinity" minHeight="10.0" prefHeight="100.0" vgrow="SOMETIMES" />
                             </rowConstraints>
                         </GridPane>
-                        <VBox alignment="TOP_CENTER" prefHeight="721.0" prefWidth="181.0" style="-fx-background-color: rgb(102,255,102);" stylesheets="@../styles/ingame.css">
+                        <VBox alignment="TOP_CENTER" prefHeight="602.0" prefWidth="181.0" style="-fx-background-color: rgb(102,255,102);" stylesheets="@../styles/ingame.css">
                             <children>
                                 <Label text="Jogador">
                                     <font>
-                                        <Font size="31.0" />
+                                        <Font name="DejaVu Sans Bold" size="30.0" />
                                     </font>
                            <VBox.margin>
                               <Insets top="25.0" />
@@ -59,44 +59,62 @@
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font>
                                 </Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/gunsmith.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_user_gunsmith" text="2x Cabo(s) Armeiro" />
+                                <Label fx:id="lb_user_gunsmith" text="2x Cabo(s) Armeiro">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/spy.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_user_spy" text="1x Espião" />
+                                <Label fx:id="lb_user_spy" text="1x Espião">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/marshal.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_user_marshal" text="1x Marechal" />
+                                <Label fx:id="lb_user_marshal" text="1x Marechal">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/flag.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_user_flag" text="1x Bandeira" />
+                                <Label fx:id="lb_user_flag" text="1x Bandeira">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/bomb.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_user_bomb" text="2x Bomba(s)" />
+                                <Label fx:id="lb_user_bomb" text="2x Bomba(s)">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                             </children>
                         </VBox>
-                        <VBox alignment="TOP_CENTER" layoutX="719.0" prefHeight="721.0" prefWidth="181.0" style="-fx-background-color: rgb(255,102,102);" stylesheets="@../styles/ingame.css">
+                        <VBox alignment="TOP_CENTER" layoutX="719.0" prefHeight="602.0" prefWidth="181.0" style="-fx-background-color: rgb(255,102,102);" stylesheets="@../styles/ingame.css">
                             <children>
                                 <Label text="Máquina">
                                     <font>
-                                        <Font size="31.0" />
+                                        <Font name="DejaVu Sans Bold" size="31.0" />
                                     </font>
                            <VBox.margin>
                               <Insets top="25.0" />
@@ -111,37 +129,55 @@
                                     <VBox.margin>
                                         <Insets />
                                     </VBox.margin>
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font>
                                 </Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/gunsmith.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_machine_gunsmith" text="2x Cabo(s) Armeiro" />
+                                <Label fx:id="lb_machine_gunsmith" text="2x Cabo(s) Armeiro">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/spy.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_machine_spy" text="1x Espião" />
+                                <Label fx:id="lb_machine_spy" text="1x Espião">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/marshal.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_machine_marshal" text="1x Marechal" />
+                                <Label fx:id="lb_machine_marshal" text="1x Marechal">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/flag.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_machine_flag" text="1x Bandeira" />
+                                <Label fx:id="lb_machine_flag" text="1x Bandeira">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                                 <ImageView fitHeight="70.0" fitWidth="70.0" pickOnBounds="true" preserveRatio="true">
                                     <image>
                                         <Image url="@../../../styles/images/bomb.png" />
                                     </image>
                                 </ImageView>
-                                <Label fx:id="lb_machine_bomb" text="2x Bomba(s)" />
+                                <Label fx:id="lb_machine_bomb" text="2x Bomba(s)">
+                           <font>
+                              <Font name="DejaVu Sans Bold" size="14.0" />
+                           </font></Label>
                             </children>
                         </VBox>
                       <HBox alignment="CENTER" layoutY="627.0" maxWidth="900.0" minWidth="900.0" prefHeight="42.0" prefWidth="900.0">
@@ -159,6 +195,11 @@
                               <Button fx:id="bt_back" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#goToMenu" prefHeight="24.0" prefWidth="104.0" text="Voltar" />
                           </children>
                       </HBox>
+                  <Label fx:id="lb_hint" layoutX="346.0" layoutY="590.0" text="Dicas Utilizadas: 0">
+                     <font>
+                        <Font name="DejaVu Sans Bold" size="20.0" />
+                     </font>
+                  </Label>
                     </children>
                     <VBox.margin>
                         <Insets />
